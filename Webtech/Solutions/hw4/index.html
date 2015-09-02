@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>Company List</title>
+    <meta name="description" content="Company List">
+    <meta name="author" content="Tushar Tiwari">
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse:collapse;
+        }
+        th, td {
+            padding: 5px;
+        }
+    </style>
+    <script>
+        function parse_display()
+        {
+            if (window.XMLHttpRequest)
+            {// code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp=new XMLHttpRequest();
+            }
+            else
+            {// code for IE6, IE5
+                xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.open("GET","cd_catalog.xml",false);
+            xmlhttp.send();
+            xmlDoc=xmlhttp.responseXML;
+
+            document.write("<table><tr><th>Artist</th><th>Title</th></tr>");
+            var x=xmlDoc.getElementsByTagName("CD");
+            for (i=0;i<x.length;i++)
+            {
+                document.write("<tr><td>");
+                document.write(x[i].getElementsByTagName("ARTIST")[0].childNodes[0].nodeValue);
+                document.write("</td><td>");
+                document.write(x[i].getElementsByTagName("TITLE")[0].childNodes[0].nodeValue);
+                document.write("</td></tr>");
+            }
+            document.write("</table>");
+        }
+    </script>
+</head>
+    <body>
+        <div style="width: 100%; margin-left: auto; margin-right: auto;
+                    text-align: center; ">
+            <div style="padding: 10px 0px 10px 0px">Enter URL for Company List XML File</div>
+            <div style="padding: 10px 0px 10px 0px"><input type="text" /></div>
+            <div style="padding: 10px 0px 10px 0px"><input type="button" value ="Submit Query" />           </div>
+        </div>
+    </body>
+</html>
