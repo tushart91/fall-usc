@@ -16,40 +16,113 @@
         }
     </style>
     <script>
-        function parse_display()
+        function parse_row(cols, header_set)
         {
+            var row_div = "";
+            var col;
+            for (var i = 0; i < header_set.length; i++)
+            {
+                col = cols.getElementsByTagName(header_set[i])[0];
+                if (header_set[i] == 'Logo')
+                {
+                    row_div += "<td><img src=\"" + col.textContent + "\"></td>";
+                }
+                else if (header_set[i] == 'Feeds')
+                {
+                    row_div += "<td><ul>";
+                    for(var j = 0; j < col.children.length; j++)
+                    {
+                        row_div += "<li>" + col.children.item(j).textContent + "</li>";
+                    }
+                    row_div += "</ul></td>";
+                }
+                else
+                {
+                    row_div += "<td>" + col.textContent + "</td>";
+                }
+            }
+            return row_div;
+        }
+
+        function construct_table(xmlDoc)
+        {
+            var table_div  = "<table>";
+            var table      = xmlDoc.getElementsByTagName("Table")[0];
+            var headers    = xmlDoc.getElementsByTagName("Header")[0].children;
+            var header_set = new Array(headers.length);
+            // Display Headers
+            table_div += "<thead><tr>";
+            for (var i = 0; i < headers.length; i++)
+            {
+                header_set[i] = headers[i].textContent;
+                table_div += "<th>" + headers[i].textContent + "</th>"
+            }
+            table_div += "</tr></thead>";
+            var rows   = xmlDoc.getElementsByTagName("Row");
+            table_div += "<tbody>";
+            for (var i = 0; i < rows.length; i++)
+            {
+                var row = parse_row(rows[i], header_set);
+                if (row)
+                {
+                    table_div += "<tr>";
+                    table_div += row;
+                    table_div += "</tr>";
+                }
+                else return false;
+            }
+            table_div += "</tbody>";
+            table_div += "</table></div>";
+            return table_div;
+        }
+        function load()
+        {
+            var xmlhttp;
             if (window.XMLHttpRequest)
             {// code for IE7+, Firefox, Chrome, Opera, Safari
-                xmlhttp=new XMLHttpRequest();
+                xmlhttp = new XMLHttpRequest();
             }
             else
             {// code for IE6, IE5
-                xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
             }
-            xmlhttp.open("GET","cd_catalog.xml",false);
-            xmlhttp.send();
-            xmlDoc=xmlhttp.responseXML;
-
-            document.write("<table><tr><th>Artist</th><th>Title</th></tr>");
-            var x=xmlDoc.getElementsByTagName("CD");
-            for (i=0;i<x.length;i++)
+            xmlhttp.onreadystatechange=function()
             {
-                document.write("<tr><td>");
-                document.write(x[i].getElementsByTagName("ARTIST")[0].childNodes[0].nodeValue);
-                document.write("</td><td>");
-                document.write(x[i].getElementsByTagName("TITLE")[0].childNodes[0].nodeValue);
-                document.write("</td></tr>");
+                if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                {
+                    var output = document.getElementById("output");
+                    var input  = document.getElementById("input");
+                    var table  = construct_table(xmlhttp.responseXML);
+                    if(table)
+                    {
+                        output.innerHTML = table;
+                        input.style.display  = 'none';
+                        output.style.display = 'block';
+                    }
+                    else
+                    {
+                        alert("Parse Error");
+                    }
+                }
             }
-            document.write("</table>");
+            var url = document.getElementsByName("url")[0].value;
+            if (url)
+            {
+                xmlhttp.open("GET", url, true);
+                xmlhttp.send();
+            }
         }
     </script>
 </head>
     <body>
-        <div style="width: 100%; margin-left: auto; margin-right: auto;
-                    text-align: center; ">
+        <div id="output">
+        </div>
+        <div id="input" style="width:800px; border-radius: 5px; padding:10px; height:50px;
+                    position:absolute; margin-top:-25px; margin-left:-400px;
+                    top:40%; left:50%; text-align: center">
             <div style="padding: 10px 0px 10px 0px">Enter URL for Company List XML File</div>
-            <div style="padding: 10px 0px 10px 0px"><input type="text" /></div>
-            <div style="padding: 10px 0px 10px 0px"><input type="button" value ="Submit Query" />           </div>
+            <div style="padding: 10px 0px 10px 0px"><input onsubmit="load()" name="url" type="text" /></div>
+            <div style="padding: 10px 0px 10px 0px"><input type="button" onclick="load()" value ="Submit Query" /></div>
         </div>
     </body>
 </html>
