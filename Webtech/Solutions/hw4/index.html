@@ -46,6 +46,7 @@
 
         function construct_table(xmlDoc)
         {
+            console.log();
             var table_div  = "<table>";
             var table      = xmlDoc.getElementsByTagName("Table")[0];
             var headers    = xmlDoc.getElementsByTagName("Header")[0].children;
@@ -92,16 +93,19 @@
                 {
                     var output = document.getElementById("output");
                     var input  = document.getElementById("input");
-                    var table  = construct_table(xmlhttp.responseXML);
-                    if(table)
+                    try
                     {
-                        output.innerHTML = table;
-                        input.style.display  = 'none';
-                        output.style.display = 'block';
+                        var table  = construct_table(xmlhttp.responseXML);
+                        if(table)
+                        {
+                            output.innerHTML = table;
+                            input.style.display  = 'none';
+                            output.style.display = 'block';
+                        }
                     }
-                    else
+                    catch(e)
                     {
-                        alert("Parse Error");
+                        alert("Error in XML file");
                     }
                 }
             }
@@ -121,8 +125,14 @@
                     position:absolute; margin-top:-25px; margin-left:-400px;
                     top:40%; left:50%; text-align: center">
             <div style="padding: 10px 0px 10px 0px">Enter URL for Company List XML File</div>
-            <div style="padding: 10px 0px 10px 0px"><input onsubmit="load()" name="url" type="text" /></div>
-            <div style="padding: 10px 0px 10px 0px"><input type="button" onclick="load()" value ="Submit Query" /></div>
+            <form action="javascript:load()">
+                <div style="padding: 10px 0px 10px 0px">
+                    <input style="width: 250px" name="url" type="text" required placeholder="Enter a valid XML file"/>
+                </div>
+                <div style="padding: 10px 0px 10px 0px">
+                    <input type="submit" value ="Submit Query" />
+                </div>
+            </form>
         </div>
     </body>
 </html>
