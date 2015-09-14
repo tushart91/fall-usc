@@ -52,6 +52,11 @@
             var header_set = new Array(headers.length);
             // Display Headers
             table_div += "<thead><tr>";
+            if (rows.length == 0)
+            {
+                alert("No Headers");
+                return false;
+            }
             for (var i = 0; i < headers.length; i++)
             {
                 header_set[i] = headers[i].textContent;
@@ -60,6 +65,11 @@
             table_div += "</tr></thead>";
             var rows   = xmlDoc.getElementsByTagName("Row");
             table_div += "<tbody>";
+            if (rows.length == 0)
+            {
+                alert("No Data");
+                return false;
+            }
             for (var i = 0; i < rows.length; i++)
             {
                 var row = parse_row(rows[i], header_set);
@@ -88,23 +98,30 @@
             }
             xmlhttp.onreadystatechange=function()
             {
-                if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                if (xmlhttp.readyState==4)
                 {
-                    var output = document.getElementById("output");
-                    var input  = document.getElementById("input");
-                    try
+                    if (xmlhttp.status==200)
                     {
-                        var table  = construct_table(xmlhttp.responseXML);
-                        if(table)
+                        var output = document.getElementById("output");
+                        var input  = document.getElementById("input");
+                        try
                         {
-                            output.innerHTML = table;
-                            input.style.display  = 'none';
-                            output.style.display = 'block';
+                            var table  = construct_table(xmlhttp.responseXML);
+                            if(table)
+                            {
+                                output.innerHTML = table;
+                                input.style.display  = 'none';
+                                output.style.display = 'block';
+                            }
+                        }
+                        catch(e)
+                        {
+                            alert("Error in XML file");
                         }
                     }
-                    catch(e)
+                    else if (xmlhttp.status==404)
                     {
-                        alert("Error in XML file");
+                        alert("XML File Not Found");
                     }
                 }
             }
