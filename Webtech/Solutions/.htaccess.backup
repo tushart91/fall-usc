@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName "Fuck Off Bitch"
+AuthUserFile /home/scf-32/ttiwari/public_html/webtech/.htpasswd
+Require valid-user
