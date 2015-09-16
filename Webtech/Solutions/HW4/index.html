@@ -103,33 +103,39 @@
                                 
                                 var params  = "menubar=0, location=0, toolbar=0, ";
                                 params += "width=" + w + ", height=" + h;
+                                try
+                                {
+                                    var results = window.open("", "_blank", params);
                                 
-                                var results = window.open("", "_blank", params);
-                                
-                                function func() {
-                                    var doc  = results.document;
-                                    var head = doc.getElementsByTagName("head")[0];
-                                    var body = doc.getElementsByTagName("body")[0];
-                                    head.innerHTML = "<meta charset=\"utf-8\">\
-                                                        <title>Company List</title>\
-                                                        <meta name=\"description\" content=\"Company List\">\
-                                                        <meta name=\"author\" content=\"Tushar Tiwari\">\
-                                                        <style>\
-                                                            table, th, td {\
-                                                                border: 1px ridge grey;\
-                                                            }\
-                                                            th, td {\
-                                                            padding: 5px;\
-                                                            }\
-                                                        </style>";
-                                    body.innerHTML = table;
-                                };
-                                results.onload = func();
+                                    function func() {
+                                        var doc  = results.document;
+                                        var head = doc.getElementsByTagName("head")[0];
+                                        var body = doc.getElementsByTagName("body")[0];
+                                        head.innerHTML = "<meta charset=\"utf-8\">\
+                                                            <title>Company List</title>\
+                                                            <meta name=\"description\" content=\"Company List\">\
+                                                            <meta name=\"author\" content=\"Tushar Tiwari\">\
+                                                            <style>\
+                                                                table, th, td {\
+                                                                    border: 1px ridge grey;\
+                                                                }\
+                                                                th, td {\
+                                                                padding: 5px;\
+                                                                }\
+                                                            </style>";
+                                        body.innerHTML = table;
+                                    };
+                                    results.onload = func();
+                                }
+                                catch(e)
+                                {
+                                    alert("Change popup settings and re-submit query");
+                                }
                             }
                         }
                         catch(e)
                         {
-                            alert("Error in XML file");
+                            alert("Error in XML Parsing");
                         }
                     }
                     else if (xmlhttp.status==404)
