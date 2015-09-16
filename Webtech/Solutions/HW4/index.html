@@ -37,24 +37,7 @@
 
         function construct_table(xmlDoc)
         {
-            console.log();
-            var table_div  = "<html>\
-                                <head>\
-                                    <meta charset=\"utf-8\">\
-                                    <title>Company List</title>\
-                                    <meta name=\"description\" content=\"Company List\">\
-                                    <meta name=\"author\" content=\"Tushar Tiwari\">\
-                                        <style>\
-                                            table, th, td {\
-                                                border: 1px ridge grey;\
-                                            }\
-                                            th, td {\
-                                            padding: 5px;\
-                                            }\
-                                        </style>\
-                                </head>\
-                                <body>\
-                                    <table>";
+            var table_div  = "<table>";
             var table      = xmlDoc.getElementsByTagName("Table")[0];
             var headers    = xmlDoc.getElementsByTagName("Header")[0].children;
             var header_set = new Array(headers.length);
@@ -90,7 +73,7 @@
                 else return false;
             }
             table_div += "</tbody>";
-            table_div += "</table></body></html>";
+            table_div += "</table><noscript>";
             return table_div;
         }
         function load()
@@ -110,8 +93,6 @@
                 {
                     if (xmlhttp.status==200)
                     {
-                        var output = document.getElementById("output");
-                        var input  = document.getElementById("input");
                         try
                         {
                             var table  = construct_table(xmlhttp.responseXML);
@@ -119,10 +100,31 @@
                             {
                                 var h = window.screen.height;
                                 var w = window.screen.width;
-                                params  = "menubar=0, location=0, toolbar=0, ";
+                                
+                                var params  = "menubar=0, location=0, toolbar=0, ";
                                 params += "width=" + w + ", height=" + h;
-                                var results = window.open("", "Company List", params);
-                                results.document.write(table);
+                                
+                                var results = window.open("", "_blank", params);
+                                
+                                function func() {
+                                    var doc  = results.document;
+                                    var head = doc.getElementsByTagName("head")[0];
+                                    var body = doc.getElementsByTagName("body")[0];
+                                    head.innerHTML = "<meta charset=\"utf-8\">\
+                                                        <title>Company List</title>\
+                                                        <meta name=\"description\" content=\"Company List\">\
+                                                        <meta name=\"author\" content=\"Tushar Tiwari\">\
+                                                        <style>\
+                                                            table, th, td {\
+                                                                border: 1px ridge grey;\
+                                                            }\
+                                                            th, td {\
+                                                            padding: 5px;\
+                                                            }\
+                                                        </style>";
+                                    body.innerHTML = table;
+                                };
+                                results.onload = func();
                             }
                         }
                         catch(e)

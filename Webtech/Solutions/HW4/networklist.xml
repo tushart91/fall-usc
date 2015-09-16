@@ -2,7 +2,7 @@
 <Workbook>
   <Table>
    <Header>
-    <Data>Bitch</Data>
+    <Data>Network</Data>
     <Data>Owner</Data>
     <Data>Feeds</Data>
     <Data>Notes</Data>
@@ -10,7 +10,7 @@
     <Data>Logo</Data>
    </Header>
    <Row>
-    <Bitch>AMC</Bitch>
+    <Network>AMC</Network>
     <Owner>AMC Networks</Owner>
     <Feeds>
         <Feed>AMC East</Feed>
@@ -23,7 +23,7 @@
 
 
    <Row>
-    <Bitch>Bravo</Bitch>
+    <Network>Bravo</Network>
     <Owner>NBC Universal</Owner>
     <Feeds>
         <Feed>Bravo East</Feed>
@@ -36,7 +36,7 @@
    </Row>
 
    <Row>
-    <Bitch>Comedy Central</Bitch>
+    <Network>Comedy Central</Network>
     <Owner>Viacom Media Networks</Owner>
     <Feeds>
         <Feed>Comedy Central East</Feed>
