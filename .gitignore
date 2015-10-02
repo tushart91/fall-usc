@@ -31,3 +31,6 @@
 .DS_Store
 Interview/
 *.swp
+
+# Access Modifiers
+.htpasswd
