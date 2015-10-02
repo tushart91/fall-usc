@@ -31,6 +31,7 @@
 .DS_Store
 Interview/
 *.swp
+.com.apple.*
 
 # Access Modifiers
 .htpasswd
