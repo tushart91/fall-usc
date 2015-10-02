@@ -37,14 +37,13 @@
         <div class="content">
             <?php
                 if ($_SERVER['REQUEST_METHOD'] == 'POST'):
-                    date_default_timezone_set('America/Los_Angeles');
                     $map = array();
                     $map['units'] = array();
                     $map['units']['us'] = "F";
                     $map['units']['si'] = "C";
                     $map['image'] = array();
                     $map['image']['clear-day'] = "clear";
-                    $map['image']['clear-night'] = "clear-night";
+                    $map['image']['clear-night'] = "clear_night";
                     $map['image']['rain'] = "rain";
                     $map['image']['snow'] = "snow";
                     $map['image']['sleet'] = "sleet";
