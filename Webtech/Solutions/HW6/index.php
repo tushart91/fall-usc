@@ -32,9 +32,110 @@
     </style>
 </head>
 <body>
-    
+    <?php
+        $address = isset($_POST['address']) ? $_POST['address'] : '';
+        $city = isset($_POST['city']) ? $_POST['city'] : '';
+        $state = isset($_POST['state']) ? $_POST['state'] : '';
+        $unit = isset($_POST['unit']) ? $_POST['unit'] : 'us';
+    ?>
     <div class="container">
         <div class="content">
+            <h1 style="text-align: center">Forecast Search</h1>
+            <form autocomplete="on" method="post" >
+                <table>
+                    <tr>
+                        <td><label for="address">Street Address *</label></td>
+                        <td><input name="address" type="address" value="<?php echo $address; ?>" required /></td>
+                    </tr>
+                    <tr>
+                        <td><label for="city">City *</label></td>
+                        <td><input name="city" type="text" value="<?php echo $city; ?>" required /></td>
+                    </tr>
+                    <tr>
+                        <td><label for="state">State *</label></td>
+                        <td><select name="state" required>
+                            <?php foreach(array(
+                                "" => 'Select your state...',
+                                "CA" => 'California',
+                                "AL" => 'Alabama',
+                                "AK" => 'Alaska',
+                                "AZ" => 'Arizona',
+                                "AR" => 'Arkansas',
+                                "CO" => 'Colorado',
+                                "CT" => 'Connecticut',
+                                "DE" => 'Delaware',
+                                "DC" => 'District Of Columbia',
+                                "FL" => 'Florida',
+                                "GA" => 'Georgia',
+                                "HI" => 'Hawaii',
+                                "ID" => 'Idaho',
+                                "IL" => 'Illinois',
+                                "IN" => 'Indiana',
+                                "IA" => 'Iowa',
+                                "KS" => 'Kansas',
+                                "KY" => 'Kentucky',
+                                "LA" => 'Louisiana',
+                                "ME" => 'Maine',
+                                "MD" => 'Maryland',
+                                "MA" => 'Massachusetts',
+                                "MI" => 'Michigan',
+                                "MN" => 'Minnesota',
+                                "MS" => 'Mississippi',
+                                "MO" => 'Missouri',
+                                "MT" => 'Montana',
+                                "NE" => 'Nebraska',
+                                "NV" => 'Nevada',
+                                "NH" => 'New Hampshire',
+                                "NJ" => 'New Jersey',
+                                "NM" => 'New Mexico',
+                                "NY" => 'New York',
+                                "NC" => 'North Carolina',
+                                "ND" => 'North Dakota',
+                                "OH" => 'Ohio',
+                                "OK" => 'Oklahoma',
+                                "OR" => 'Oregon',
+                                "PA" => 'Pennsylvania',
+                                "RI" => 'Rhode Island',
+                                "SC" => 'South Carolina',
+                                "SD" => 'South Dakota',
+                                "TN" => 'Tennessee',
+                                "TX" => 'Texas',
+                                "UT" => 'Utah',
+                                "VT" => 'Vermont',
+                                "VA" => 'Virginia',
+                                "WA" => 'Washington',
+                                "WV" => 'West Virginia',
+                                "WI" => 'Wisconsin',
+                                "WY" => 'Wyoming'
+                            ) as $key => $val){
+                                ?><option value="<?php echo $key; ?>"<?php
+                                    if($key==$state) echo ' selected="selected"';
+                                ?>><?php echo $val; ?></option><?php
+                            }?>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Degree *</td>
+                        <td>
+                            <?php foreach(array(
+                                "us" => 'Farenheit',
+                                "si" => 'Celsius'
+                            ) as $key => $val){
+                                ?><input type="radio" required name="unit" 
+                                         value="<?php echo $key; ?>"
+                                         <?php if($key==$unit) echo ' checked';?> />
+                                         <?php echo $val; ?><?php } ?>
+                        </td>
+                    </tr>
+                </table><br />
+                <div style="text-align: center">
+                    <input type="submit" value="Submit" />
+                    <input type="reset" value="Clear" />
+                </div>
+            </form><br />
+            <div>* - <i>Mandatory fields.</i></div><br />
+            <div style="text-align: center"><a href="http://forecast.io">Powered by Forecast.io</a></div>
             <?php
                 if ($_SERVER['REQUEST_METHOD'] == 'POST'):
                     $map = array();
@@ -47,8 +148,8 @@
                     $map['image']['rain'] = "rain";
                     $map['image']['snow'] = "snow";
                     $map['image']['sleet'] = "sleet";
-                    $map['image']['wind'] = "clear";
-                    $map['image']['fog'] = "wind";
+                    $map['image']['wind'] = "wind";
+                    $map['image']['fog'] = "fog";
                     $map['image']['cloudy'] = "cloudy";
                     $map['image']['partly-cloudy-day'] = "cloud_day";
                     $map['image']['partly-cloudy-night'] = "cloud_night";
@@ -56,8 +157,8 @@
                     $map['precipitation'][0] = "None";
                     $map['precipitation'][0.002] = "Very Light";
                     $map['precipitation'][0.017] = "Light";
-                    $map['precipitation'][0.01] = "Moderate";
-                    $map['precipitation'][0.04] = "Heavy";
+                    $map['precipitation'][0.1] = "Moderate";
+                    $map['precipitation'][0.4] = "Heavy";
                     $map_url  = "http://maps.google.com/maps/api/geocode/xml?address=";
                     $map_url .= $_POST["address"] . ",";
                     $map_url .= $_POST["city"] . "," . $_POST["state"];
@@ -68,6 +169,8 @@
                         $api = "https://api.forecast.io/forecast/37bf1528687d1cc9ccb05eb372a2f442/";
                         $api .= $lat.",".$lng."?units=".$_POST["unit"]."&exclude=flags";
                         $json = json_decode(file_get_contents($api), true);?>
+                        <br />
+                        <hr>
                         <h1 style="text-align: center"><?php echo ($json['currently']['summary']); ?></h1>
                         <h1 style="text-align: center"><?php echo ($json['currently']['temperature']); ?>&deg; <?php echo ($map['units'][$_POST["unit"]]); ?></h1>
                         <div style="text-align: center">
@@ -106,94 +209,12 @@
                                 <td><?php echo(date('h:i A', $json['daily']['data'][0]["sunsetTime"])); ?></td>
                             </tr>
                         </table>
-                    <?php endif;
-                else:
+                    <?php
+                        else:
+                            echo ("<script>alert(\"Cannot fetch latitude and longitude for given address\"</script>");
+                        endif;
+                endif;
             ?>
-            <h1 style="text-align: center">Forecast Search</h1>
-            <form method="post" >
-                <table>
-                    <tr>
-                        <td><label for="address">Street Address *</label></td>
-                        <td><input name="address" type="address" value="1282 W 29th St" required /></td>
-                    </tr>
-                    <tr>
-                        <td><label for="city">City *</label></td>
-                        <td><input name="city" type="text" value="Los Angeles" required /></td>
-                    </tr>
-                    <tr>
-                        <td><label for="state">State *</label></td>
-                        <td><select name="state" required>
-                                <option value="CA">California</option>
-                                <option value=""  >Select your state...</option>
-                                <option value="AL">Alabama</option>
-                                <option value="AK">Alaska</option>
-                                <option value="AZ">Arizona</option>
-                                <option value="AR">Arkansas</option>
-                                <option value="CO">Colorado</option>
-                                <option value="CT">Connecticut</option>
-                                <option value="DE">Delaware</option>
-                                <option value="DC">District Of Columbia</option>
-                                <option value="FL">Florida</option>
-                                <option value="GA">Georgia</option>
-                                <option value="HI">Hawaii</option>
-                                <option value="ID">Idaho</option>
-                                <option value="IL">Illinois</option>
-                                <option value="IN">Indiana</option>
-                                <option value="IA">Iowa</option>
-                                <option value="KS">Kansas</option>
-                                <option value="KY">Kentucky</option>
-                                <option value="LA">Louisiana</option>
-                                <option value="ME">Maine</option>
-                                <option value="MD">Maryland</option>
-                                <option value="MA">Massachusetts</option>
-                                <option value="MI">Michigan</option>
-                                <option value="MN">Minnesota</option>
-                                <option value="MS">Mississippi</option>
-                                <option value="MO">Missouri</option>
-                                <option value="MT">Montana</option>
-                                <option value="NE">Nebraska</option>
-                                <option value="NV">Nevada</option>
-                                <option value="NH">New Hampshire</option>
-                                <option value="NJ">New Jersey</option>
-                                <option value="NM">New Mexico</option>
-                                <option value="NY">New York</option>
-                                <option value="NC">North Carolina</option>
-                                <option value="ND">North Dakota</option>
-                                <option value="OH">Ohio</option>
-                                <option value="OK">Oklahoma</option>
-                                <option value="OR">Oregon</option>
-                                <option value="PA">Pennsylvania</option>
-                                <option value="RI">Rhode Island</option>
-                                <option value="SC">South Carolina</option>
-                                <option value="SD">South Dakota</option>
-                                <option value="TN">Tennessee</option>
-                                <option value="TX">Texas</option>
-                                <option value="UT">Utah</option>
-                                <option value="VT">Vermont</option>
-                                <option value="VA">Virginia</option>
-                                <option value="WA">Washington</option>
-                                <option value="WV">West Virginia</option>
-                                <option value="WI">Wisconsin</option>
-                                <option value="WY">Wyoming</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Degree *</td>
-                        <td>
-                            <input type="radio" checked required name="unit" value="us">Fahrenheit
-                            <input type="radio" required name="unit" value="si">Celsius
-                        </td>
-                    </tr>
-                </table><br />
-                <div style="text-align: center">
-                    <input type="submit" value="Submit" />
-                    <input type="reset" value="Clear" />
-                </div>
-            </form><br />
-            <div>* - <i>Mandatory fields.</i></div><br />
-            <div style="text-align: center"><a href="http://forecast.io">Powered by Forecast.io</a></div>
-            <?php endif; ?>
         </div>
     </div>
 </body>
