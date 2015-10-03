@@ -30,14 +30,11 @@
             padding: 5px 10px;
         }
     </style>
+    <?php if ($_SERVER['REQUEST_METHOD'] == 'POST'): ?>
+    
+    <?php endif; ?>
 </head>
 <body>
-    <?php
-        $address = isset($_POST['address']) ? $_POST['address'] : '';
-        $city = isset($_POST['city']) ? $_POST['city'] : '';
-        $state = isset($_POST['state']) ? $_POST['state'] : '';
-        $unit = isset($_POST['unit']) ? $_POST['unit'] : 'us';
-    ?>
     <div class="container">
         <div class="content">
             <h1 style="text-align: center">Forecast Search</h1>
@@ -45,87 +42,77 @@
                 <table>
                     <tr>
                         <td><label for="address">Street Address *</label></td>
-                        <td><input name="address" type="address" value="<?php echo $address; ?>" required /></td>
+                        <td><input name="address" type="address" value="" required /></td>
                     </tr>
                     <tr>
                         <td><label for="city">City *</label></td>
-                        <td><input name="city" type="text" value="<?php echo $city; ?>" required /></td>
+                        <td><input name="city" type="text" value="" required /></td>
                     </tr>
                     <tr>
                         <td><label for="state">State *</label></td>
                         <td><select name="state" required>
-                            <?php foreach(array(
-                                "" => 'Select your state...',
-                                "CA" => 'California',
-                                "AL" => 'Alabama',
-                                "AK" => 'Alaska',
-                                "AZ" => 'Arizona',
-                                "AR" => 'Arkansas',
-                                "CO" => 'Colorado',
-                                "CT" => 'Connecticut',
-                                "DE" => 'Delaware',
-                                "DC" => 'District Of Columbia',
-                                "FL" => 'Florida',
-                                "GA" => 'Georgia',
-                                "HI" => 'Hawaii',
-                                "ID" => 'Idaho',
-                                "IL" => 'Illinois',
-                                "IN" => 'Indiana',
-                                "IA" => 'Iowa',
-                                "KS" => 'Kansas',
-                                "KY" => 'Kentucky',
-                                "LA" => 'Louisiana',
-                                "ME" => 'Maine',
-                                "MD" => 'Maryland',
-                                "MA" => 'Massachusetts',
-                                "MI" => 'Michigan',
-                                "MN" => 'Minnesota',
-                                "MS" => 'Mississippi',
-                                "MO" => 'Missouri',
-                                "MT" => 'Montana',
-                                "NE" => 'Nebraska',
-                                "NV" => 'Nevada',
-                                "NH" => 'New Hampshire',
-                                "NJ" => 'New Jersey',
-                                "NM" => 'New Mexico',
-                                "NY" => 'New York',
-                                "NC" => 'North Carolina',
-                                "ND" => 'North Dakota',
-                                "OH" => 'Ohio',
-                                "OK" => 'Oklahoma',
-                                "OR" => 'Oregon',
-                                "PA" => 'Pennsylvania',
-                                "RI" => 'Rhode Island',
-                                "SC" => 'South Carolina',
-                                "SD" => 'South Dakota',
-                                "TN" => 'Tennessee',
-                                "TX" => 'Texas',
-                                "UT" => 'Utah',
-                                "VT" => 'Vermont',
-                                "VA" => 'Virginia',
-                                "WA" => 'Washington',
-                                "WV" => 'West Virginia',
-                                "WI" => 'Wisconsin',
-                                "WY" => 'Wyoming'
-                            ) as $key => $val){
-                                ?><option value="<?php echo $key; ?>"<?php
-                                    if($key==$state) echo ' selected="selected"';
-                                ?>><?php echo $val; ?></option><?php
-                            }?>
+                                <option value=""  >Select your state...</option>
+                                <option value="CA">California</option>
+                                <option value="AL">Alabama</option>
+                                <option value="AK">Alaska</option>
+                                <option value="AZ">Arizona</option>
+                                <option value="AR">Arkansas</option>
+                                <option value="CO">Colorado</option>
+                                <option value="CT">Connecticut</option>
+                                <option value="DE">Delaware</option>
+                                <option value="DC">District Of Columbia</option>
+                                <option value="FL">Florida</option>
+                                <option value="GA">Georgia</option>
+                                <option value="HI">Hawaii</option>
+                                <option value="ID">Idaho</option>
+                                <option value="IL">Illinois</option>
+                                <option value="IN">Indiana</option>
+                                <option value="IA">Iowa</option>
+                                <option value="KS">Kansas</option>
+                                <option value="KY">Kentucky</option>
+                                <option value="LA">Louisiana</option>
+                                <option value="ME">Maine</option>
+                                <option value="MD">Maryland</option>
+                                <option value="MA">Massachusetts</option>
+                                <option value="MI">Michigan</option>
+                                <option value="MN">Minnesota</option>
+                                <option value="MS">Mississippi</option>
+                                <option value="MO">Missouri</option>
+                                <option value="MT">Montana</option>
+                                <option value="NE">Nebraska</option>
+                                <option value="NV">Nevada</option>
+                                <option value="NH">New Hampshire</option>
+                                <option value="NJ">New Jersey</option>
+                                <option value="NM">New Mexico</option>
+                                <option value="NY">New York</option>
+                                <option value="NC">North Carolina</option>
+                                <option value="ND">North Dakota</option>
+                                <option value="OH">Ohio</option>
+                                <option value="OK">Oklahoma</option>
+                                <option value="OR">Oregon</option>
+                                <option value="PA">Pennsylvania</option>
+                                <option value="RI">Rhode Island</option>
+                                <option value="SC">South Carolina</option>
+                                <option value="SD">South Dakota</option>
+                                <option value="TN">Tennessee</option>
+                                <option value="TX">Texas</option>
+                                <option value="UT">Utah</option>
+                                <option value="VT">Vermont</option>
+                                <option value="VA">Virginia</option>
+                                <option value="WA">Washington</option>
+                                <option value="WV">West Virginia</option>
+                                <option value="WI">Wisconsin</option>
+                                <option value="WY">Wyoming</option>
                             </select>
                         </td>
                     </tr>
                     <tr>
                         <td>Degree *</td>
                         <td>
-                            <?php foreach(array(
-                                "us" => 'Farenheit',
-                                "si" => 'Celsius'
-                            ) as $key => $val){
-                                ?><input type="radio" required name="unit" 
-                                         value="<?php echo $key; ?>"
-                                         <?php if($key==$unit) echo ' checked';?> />
-                                         <?php echo $val; ?><?php } ?>
+                            <input type="radio" checked required name="unit" id="us" value="us">
+                            Fahrenheit
+                            <input type="radio" required name="unit" id="si" value="si">
+                            Celsius
                         </td>
                     </tr>
                 </table><br />
@@ -212,11 +199,77 @@
                     <?php
                         else:
                             echo ("<script>alert(\"Cannot fetch latitude and longitude for given address\"</script>");
-                        endif;
-                endif;
-            ?>
+                        endif; ?>
+                <script type="application/javascript">
+                <?php
+                    $address = isset($_POST['address']) ? $_POST['address'] : '';
+                    $city = isset($_POST['city']) ? $_POST['city'] : '';
+                    $state = isset($_POST['state']) ? $_POST['state'] : '';
+                    $unit = isset($_POST['unit']) ? $_POST['unit'] : 'us';
+                ?>
+                    
+                    var dict = {};
+                    dict[""] = 0;
+                    dict["CA"] = 1;
+                    dict["AL"] = 2;
+                    dict["AK"] = 3;
+                    dict["AZ"] = 4;
+                    dict["AR"] = 5;
+                    dict["CO"] = 6;
+                    dict["CT"] = 7;
+                    dict["DE"] = 8;
+                    dict["DC"] = 9;
+                    dict["FL"] = 10;
+                    dict["GA"] = 11;
+                    dict["HI"] = 12;
+                    dict["ID"] = 13;
+                    dict["IL"] = 14;
+                    dict["IN"] = 15;
+                    dict["IA"] = 16;
+                    dict["KS"] = 17;
+                    dict["KY"] = 18;
+                    dict["LA"] = 19;
+                    dict["ME"] = 20;
+                    dict["MD"] = 21;
+                    dict["MA"] = 22;
+                    dict["MI"] = 23;
+                    dict["MN"] = 24;
+                    dict["MS"] = 25;
+                    dict["MO"] = 26;
+                    dict["MT"] = 27;
+                    dict["NE"] = 28;
+                    dict["NV"] = 29;
+                    dict["NH"] = 30;
+                    dict["NJ"] = 31;
+                    dict["NM"] = 32;
+                    dict["NY"] = 33;
+                    dict["NC"] = 34;
+                    dict["ND"] = 35;
+                    dict["OH"] = 36;
+                    dict["OK"] = 37;
+                    dict["OR"] = 38;
+                    dict["PA"] = 39;
+                    dict["RI"] = 40;
+                    dict["SC"] = 41;
+                    dict["SD"] = 42;
+                    dict["TN"] = 43;
+                    dict["TX"] = 44;
+                    dict["UT"] = 45;
+                    dict["VT"] = 46;
+                    dict["VA"] = 47;
+                    dict["WA"] = 48;
+                    dict["WV"] = 49;
+                    dict["WI"] = 50;
+                    dict["WY"] = 51;
+                    document.getElementsByName("address")[0].value = "<?php echo($address); ?>";
+                    document.getElementsByName("city")[0].value = "<?php echo($city); ?>";
+                    document.getElementsByName("state")[0].selectedIndex = dict["<?php echo($state); ?>"];
+                    document.getElementById("<?php echo($unit); ?>").checked = true;
+            </script>
+            <?php endif; ?>
         </div>
     </div>
+    
 </body>
 </html>
     
