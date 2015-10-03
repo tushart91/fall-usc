@@ -30,27 +30,48 @@
             padding: 5px 10px;
         }
     </style>
-    <?php if ($_SERVER['REQUEST_METHOD'] == 'POST'): ?>
-    
-    <?php endif; ?>
+    <script type="text/javascript">
+        function validateForm()
+        {
+            var address = document.getElementsByName("address")[0].value;
+            var city = document.getElementsByName("city")[0].value;
+            var state = document.getElementsByName("state")[0].value;
+            if (!address)
+            {
+                alert("Enter Street Address");
+                return false;
+            }
+            else if (!city)
+            {
+                alert("Enter City");
+                return false;
+            }
+            else if (!state)
+            {
+                alert("Enter State");
+                return false;
+            }
+            return true;
+        }
+    </script>
 </head>
 <body>
     <div class="container">
         <div class="content">
             <h1 style="text-align: center">Forecast Search</h1>
-            <form autocomplete="on" method="post" >
+            <form autocomplete="on" onsubmit="return validateForm()" method="post" >
                 <table>
                     <tr>
                         <td><label for="address">Street Address *</label></td>
-                        <td><input name="address" type="address" value="" required /></td>
+                        <td><input name="address" type="address" value="" /></td>
                     </tr>
                     <tr>
                         <td><label for="city">City *</label></td>
-                        <td><input name="city" type="text" value="" required /></td>
+                        <td><input name="city" type="text" value="" /></td>
                     </tr>
                     <tr>
                         <td><label for="state">State *</label></td>
-                        <td><select name="state" required>
+                        <td><select name="state">
                                 <option value=""  >Select your state...</option>
                                 <option value="CA">California</option>
                                 <option value="AL">Alabama</option>
@@ -109,9 +130,9 @@
                     <tr>
                         <td>Degree *</td>
                         <td>
-                            <input type="radio" checked required name="unit" id="us" value="us">
+                            <input type="radio" checked name="unit" id="us" value="us">
                             Fahrenheit
-                            <input type="radio" required name="unit" id="si" value="si">
+                            <input type="radio" name="unit" id="si" value="si">
                             Celsius
                         </td>
                     </tr>
@@ -198,7 +219,7 @@
                         </table>
                     <?php
                         else:
-                            echo ("<script>alert(\"Cannot fetch latitude and longitude for given address\"</script>");
+                            echo ("<script>alert(\"Cannot fetch latitude and longitude for given address\");</script>");
                         endif; ?>
                 <script type="application/javascript">
                 <?php
