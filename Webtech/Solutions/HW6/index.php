@@ -31,6 +31,10 @@
         }
     </style>
     <script type="text/javascript">
+        function resetForm()
+        {
+            document.getElementById("result").style.display = 'none';
+        }
         function validateForm()
         {
             var address = document.getElementsByName("address")[0].value;
@@ -59,7 +63,7 @@
     <div class="container">
         <div class="content">
             <h1 style="text-align: center">Forecast Search</h1>
-            <form autocomplete="on" onsubmit="return validateForm()" method="post" >
+            <form autocomplete="on" onreset="resetForm()" onsubmit="return validateForm()" method="post" >
                 <table>
                     <tr>
                         <td><label for="address">Street Address *</label></td>
@@ -73,11 +77,11 @@
                         <td><label for="state">State *</label></td>
                         <td><select name="state">
                                 <option value=""  >Select your state...</option>
-                                <option value="CA">California</option>
                                 <option value="AL">Alabama</option>
                                 <option value="AK">Alaska</option>
                                 <option value="AZ">Arizona</option>
                                 <option value="AR">Arkansas</option>
+                                <option value="CA">California</option>
                                 <option value="CO">Colorado</option>
                                 <option value="CT">Connecticut</option>
                                 <option value="DE">Delaware</option>
@@ -177,6 +181,7 @@
                         $api = "https://api.forecast.io/forecast/37bf1528687d1cc9ccb05eb372a2f442/";
                         $api .= $lat.",".$lng."?units=".$_POST["unit"]."&exclude=flags";
                         $json = json_decode(file_get_contents($api), true);?>
+                        <div id="result">
                         <br />
                         <hr>
                         <h1 style="text-align: center"><?php echo ($json['currently']['summary']); ?></h1>
@@ -217,6 +222,7 @@
                                 <td><?php echo(date('h:i A', $json['daily']['data'][0]["sunsetTime"])); ?></td>
                             </tr>
                         </table>
+                        </div>
                     <?php
                         else:
                             echo ("<script>alert(\"Cannot fetch latitude and longitude for given address\");</script>");
