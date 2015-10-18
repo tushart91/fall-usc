@@ -237,11 +237,11 @@
                     
                     var dict = {};
                     dict[""] = 0;
-                    dict["CA"] = 1;
-                    dict["AL"] = 2;
-                    dict["AK"] = 3;
-                    dict["AZ"] = 4;
-                    dict["AR"] = 5;
+                    dict["AL"] = 1;
+                    dict["AK"] = 2;
+                    dict["AZ"] = 3;
+                    dict["AR"] = 4;
+                    dict["CA"] = 5;
                     dict["CO"] = 6;
                     dict["CT"] = 7;
                     dict["DE"] = 8;
