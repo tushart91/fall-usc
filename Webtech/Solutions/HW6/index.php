@@ -188,9 +188,9 @@
                         <h1 style="text-align: center"><?php echo ($json['currently']['temperature']); ?>&deg; <?php echo ($map['units'][$_POST["unit"]]); ?></h1>
                         <div style="text-align: center">
                             <img src="images/<?php echo($map['image'][$json['currently']['icon']]) ?>.png" alt-text="<?php echo($json['currently']['summary']); ?>"/></div>
-                        <table>
+                        <table style="width: 80%; margin: 0 auto">
                             <tr>
-                                <td>Precipitation</td>
+                                <td style="width: 60%">Precipitation</td>
                                 <td><?php echo($map['precipitation'][$json['currently']['precipIntensity']]); ?></td>
                             </tr>
                             <tr>
