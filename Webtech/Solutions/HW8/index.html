@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Forecast</title>
+    <meta name="description" content="Forecast">
+    <meta name="author" content="Tushar Tiwari">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+<!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: table;
+        }
+        body {
+            background: url("images/bg.jpg"); 
+            background-repeat: no-repeat;
+            background-size: cover;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-position: center;
+        }
+        .element {
+            float: left;
+        }
+        .asterisk {
+            color: red;
+        }
+        .mylabel {
+            color: white;
+        }
+        .col-content {
+            padding: 5px 5px 20px 5px !important;
+            margin: 0;
+        }
+        .row-content {
+            border-radius: 3px;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding: 15px 5px 0 10px
+        }
+        .error {
+            display: none;
+            color: firebrick;
+            font-weight: bold;
+            font-size: 12px
+        }
+        .white-label {
+            color: white;
+            font-weight: bold;
+            font-size: 12px
+        }
+        .container-container {
+            margin: auto;
+            padding: 10px 10px 0 10px;
+        }
+    </style>
+    <script type="text/javascript">
+        function resetForm()
+        {
+            document.getElementById("result").style.display = 'none';
+        }
+        function validateForm()
+        {
+            var address = document.getElementsByName("address")[0].value;
+            var city = document.getElementsByName("city")[0].value;
+            var state = document.getElementsByName("state")[0].value;
+            if (!address)
+            {
+                alert("Enter Street Address");
+                return false;
+            }
+            else if (!city)
+            {
+                alert("Enter City");
+                return false;
+            }
+            else if (!state)
+            {
+                alert("Enter State");
+                return false;
+            }
+            return true;
+        }
+    </script>
+</head>
+<body>
+    <h1 style="text-align: center">Forecast Search</h1>
+    <div class="container-container">
+        <div class="container">
+            <form autocomplete="on" onreset="resetForm()" onsubmit="return validateForm()" method="post" >
+                <div class="row row-content">
+                    <div class="col-xs-12 col-sm-8 col-md-3 col-content">
+                        <div class="white-label">
+                            Street Address:<span class="asterisk">&nbsp;*</span>
+                        </div>
+                        <div>
+                            <input name="address" placeholder="Enter street address" value=""
+                                class="form-control" type="text" />
+                        </div>
+                        <div class="error">Please enter the street address</div>
+                    </div>
+                    <div class="col-xs-12 col-sm-8 col-md-2 col-content">
+                        <div class="white-label">City:<span class="asterisk">&nbsp;*</span></div>
+                        <div><input name="address" placeholder="Enter the city name" 
+                                    class="form-control" type="text" value="" /></div>
+                        <div class="error">Please enter the city</div>
+                    </div>
+                    <div class="col-xs-12 col-sm-8 col-md-2 col-content">
+                        <div class="white-label">State:<span class="asterisk">&nbsp;*</span></div>
+                        <div><select class="form-control" name="state">
+                            <option value=""  >Select your state...</option>
+                            <option value="AL">Alabama</option>
+                            <option value="AK">Alaska</option>
+                            <option value="AZ">Arizona</option>
+                            <option value="AR">Arkansas</option>
+                            <option value="CA">California</option>
+                            <option value="CO">Colorado</option>
+                            <option value="CT">Connecticut</option>
+                            <option value="DE">Delaware</option>
+                            <option value="DC">District Of Columbia</option>
+                            <option value="FL">Florida</option>
+                            <option value="GA">Georgia</option>
+                            <option value="HI">Hawaii</option>
+                            <option value="ID">Idaho</option>
+                            <option value="IL">Illinois</option>
+                            <option value="IN">Indiana</option>
+                            <option value="IA">Iowa</option>
+                            <option value="KS">Kansas</option>
+                            <option value="KY">Kentucky</option>
+                            <option value="LA">Louisiana</option>
+                            <option value="ME">Maine</option>
+                            <option value="MD">Maryland</option>
+                            <option value="MA">Massachusetts</option>
+                            <option value="MI">Michigan</option>
+                            <option value="MN">Minnesota</option>
+                            <option value="MS">Mississippi</option>
+                            <option value="MO">Missouri</option>
+                            <option value="MT">Montana</option>
+                            <option value="NE">Nebraska</option>
+                            <option value="NV">Nevada</option>
+                            <option value="NH">New Hampshire</option>
+                            <option value="NJ">New Jersey</option>
+                            <option value="NM">New Mexico</option>
+                            <option value="NY">New York</option>
+                            <option value="NC">North Carolina</option>
+                            <option value="ND">North Dakota</option>
+                            <option value="OH">Ohio</option>
+                            <option value="OK">Oklahoma</option>
+                            <option value="OR">Oregon</option>
+                            <option value="PA">Pennsylvania</option>
+                            <option value="RI">Rhode Island</option>
+                            <option value="SC">South Carolina</option>
+                            <option value="SD">South Dakota</option>
+                            <option value="TN">Tennessee</option>
+                            <option value="TX">Texas</option>
+                            <option value="UT">Utah</option>
+                            <option value="VT">Vermont</option>
+                            <option value="VA">Virginia</option>
+                            <option value="WA">Washington</option>
+                            <option value="WV">West Virginia</option>
+                            <option value="WI">Wisconsin</option>
+                            <option value="WY">Wyoming</option>
+                        </select></div>
+                        <div class="error">Please select a state</div>
+                    </div>
+                    <div class="col-xs-12 col-sm-8 col-md-2 col-content">
+                        <div class="white-label">
+                            Degree:<span class="asterisk">&nbsp;*</span>
+                        </div>
+                        <div style="padding-top: 5px">
+                            <label class="radio-inline mylabel"><input type="radio" checked name="unit" id="us" value="us">Fahrenheit</label>
+                            <label class="radio-inline mylabel"><input type="radio" name="unit" id="si" value="si">Celsius</label>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-8 col-md-3 col-content">
+                        <div style="float: right; margin-right: 15px; padding-top: 10px">
+                        <button type="button" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-search" style="padding-right: 5px"></span>Search
+                        </button>
+                        <button type="button" style="float: right" class="btn btn-default">
+                            <span class="glyphicon glyphicon-refresh" style="padding-right: 5px"></span>Clear
+                        </button>
+                        <div style="padding-top: 20px; color: white">Powered by:
+                            <a href="http://forecast.io"><img width="100px" src="images/forecast_logo.png" /></a>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <br />
+        </div>
+    </div>
+</body>
+</html>
