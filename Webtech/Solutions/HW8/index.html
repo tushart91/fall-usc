@@ -6,11 +6,14 @@
     <meta name="description" content="Forecast">
     <meta name="author" content="Tushar Tiwari">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
 <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
-
+    
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <style>
@@ -28,10 +31,7 @@
             -webkit-background-size: cover;
             -moz-background-size: cover;
             -o-background-size: cover;
-            background-position: center;
-        }
-        .element {
-            float: left;
+            background-attachment: fixed;
         }
         .asterisk {
             color: red;
@@ -40,13 +40,17 @@
             color: white;
         }
         .col-content {
-            padding: 5px 5px 20px 5px !important;
-            margin: 0;
+            padding: 5px 5px 15px 5px !important;
+            vertical-align: top;
         }
         .row-content {
             border-radius: 3px;
-            background-color: rgba(0, 0, 0, 0.4);
-            padding: 15px 5px 0 10px
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 15px 10px 20px 10px;
+        }
+        .col-radius {
+            border-radius: 8px;
+            padding: 15px 5px 20px 5px; !important;
         }
         .error {
             display: none;
@@ -54,42 +58,131 @@
             font-weight: bold;
             font-size: 12px
         }
-        .white-label {
+        .dlabel {
             color: white;
             font-weight: bold;
             font-size: 12px
         }
+        .white {
+            color: white;
+        }
+        .temp {
+            font-size: 36px;
+            font-weight: bold;
+        }
         .container-container {
             margin: auto;
-            padding: 10px 10px 0 10px;
+            padding: 10px 10px 10px 10px;
+        }
+        .table-striped > tbody > tr:nth-of-type(even) {
+            background-color: #f1dddd;
+        }
+        .row-centered {
+            text-align:center;
+        }
+        .col-left {
+            display: inline-table;
+            /* reset the text-align */
+            float: none;
+            text-align: left;
+            /* inline-block space fix */
+            margin-right:-4px;
+        }
+        .col-centered {
+            display: inline-table;
+            /* reset the text-align */
+            float: none;
+            text-align: center;
+            /* inline-block space fix */
+            margin-right:-4px;
+            padding: 5px 5px 5px 5px !important;
+        }
+        .lab-pad {
+            padding: 5px 0;
+        }
+        #nextseven {
+            border-radius: 3px;
+            background-color: #2f3439;
+            padding: 15px 10px 20px 10px;
+        }
+        .modal-caption {
+            font-size: 20px;
+            color: #ffb122;
+        }
+        .modal-day {
+            font-size: 20px;
+        }
+        .modal-table-header {
+            
+        }
+        .modal-value {
+            padding-top: 5px;
+            font-size: 11px
         }
     </style>
     <script type="text/javascript">
+        var tabs = ['rightnow', 'nexttwentyfour', 'nextseven'];
         function resetForm()
         {
-            document.getElementById("result").style.display = 'none';
+            document.getElementsByName("street")[0].value = "";
+            document.getElementsByName("city")[0].value = "";
+            document.getElementsByName("state")[0].selectedIndex = 0;
+            document.getElementById("us").checked = true;
+            document.getElementById("street_error").style.display = "none";
+            document.getElementById("city_error").style.display = "none";
+            document.getElementById("state_error").style.display = "none";
+            if (document.getElementById("result"))
+                document.getElementById("result").style.display = 'none';
         }
         function validateForm()
         {
-            var address = document.getElementsByName("address")[0].value;
+            var address = document.getElementsByName("street")[0].value;
             var city = document.getElementsByName("city")[0].value;
             var state = document.getElementsByName("state")[0].value;
+            var flag = false;
             if (!address)
             {
-                alert("Enter Street Address");
-                return false;
+                document.getElementById("street_error").style.display = "block";
+                flag = true;
             }
-            else if (!city)
+            else
             {
-                alert("Enter City");
-                return false;
+                document.getElementById("street_error").style.display = "none";
             }
-            else if (!state)
+            if (!city)
             {
-                alert("Enter State");
-                return false;
+                document.getElementById("city_error").style.display = "block";
+                flag = true;
             }
+            else
+            {
+                document.getElementById("city_error").style.display = "none";
+            }
+            if (!state)
+            {
+                document.getElementById("state_error").style.display = "block";
+                flag = true;
+            }
+            else
+            {
+                document.getElementById("state_error").style.display = "none";
+            }
+            if (flag)
+                return false;
             return true;
+        }
+        function resetError(sender, error)
+        {
+            if (!sender.value && document.getElementById(error).style.display == "none")
+            {
+                document.getElementById(error).style.display = "block";
+            }
+        }
+        function tab_change(tab_id)
+        {
+            for (var i = 0; i < 3; i++)
+                document.getElementById(tabs[i]).style.display = 'none';
+            document.getElementById(tab_id).style.display = 'block';
         }
     </script>
 </head>
@@ -97,108 +190,446 @@
     <h1 style="text-align: center">Forecast Search</h1>
     <div class="container-container">
         <div class="container">
-            <form autocomplete="on" onreset="resetForm()" onsubmit="return validateForm()" method="post" >
-                <div class="row row-content">
-                    <div class="col-xs-12 col-sm-8 col-md-3 col-content">
-                        <div class="white-label">
-                            Street Address:<span class="asterisk">&nbsp;*</span>
-                        </div>
-                        <div>
-                            <input name="address" placeholder="Enter street address" value=""
-                                class="form-control" type="text" />
-                        </div>
-                        <div class="error">Please enter the street address</div>
+            <div class="row row-content row-centered">
+                <div class="col-xs-12 col-sm-8 col-md-3 col-content col-left">
+                    <div class="dlabel">
+                        Street Address:<span class="asterisk">&nbsp;*</span>
                     </div>
-                    <div class="col-xs-12 col-sm-8 col-md-2 col-content">
-                        <div class="white-label">City:<span class="asterisk">&nbsp;*</span></div>
-                        <div><input name="address" placeholder="Enter the city name" 
-                                    class="form-control" type="text" value="" /></div>
-                        <div class="error">Please enter the city</div>
+                    <div>
+                        <input name="street" placeholder="Enter street address" value=""
+                            class="form-control" type="text" 
+                            oninput="resetError(this, 'street_error')"/>
                     </div>
-                    <div class="col-xs-12 col-sm-8 col-md-2 col-content">
-                        <div class="white-label">State:<span class="asterisk">&nbsp;*</span></div>
-                        <div><select class="form-control" name="state">
-                            <option value=""  >Select your state...</option>
-                            <option value="AL">Alabama</option>
-                            <option value="AK">Alaska</option>
-                            <option value="AZ">Arizona</option>
-                            <option value="AR">Arkansas</option>
-                            <option value="CA">California</option>
-                            <option value="CO">Colorado</option>
-                            <option value="CT">Connecticut</option>
-                            <option value="DE">Delaware</option>
-                            <option value="DC">District Of Columbia</option>
-                            <option value="FL">Florida</option>
-                            <option value="GA">Georgia</option>
-                            <option value="HI">Hawaii</option>
-                            <option value="ID">Idaho</option>
-                            <option value="IL">Illinois</option>
-                            <option value="IN">Indiana</option>
-                            <option value="IA">Iowa</option>
-                            <option value="KS">Kansas</option>
-                            <option value="KY">Kentucky</option>
-                            <option value="LA">Louisiana</option>
-                            <option value="ME">Maine</option>
-                            <option value="MD">Maryland</option>
-                            <option value="MA">Massachusetts</option>
-                            <option value="MI">Michigan</option>
-                            <option value="MN">Minnesota</option>
-                            <option value="MS">Mississippi</option>
-                            <option value="MO">Missouri</option>
-                            <option value="MT">Montana</option>
-                            <option value="NE">Nebraska</option>
-                            <option value="NV">Nevada</option>
-                            <option value="NH">New Hampshire</option>
-                            <option value="NJ">New Jersey</option>
-                            <option value="NM">New Mexico</option>
-                            <option value="NY">New York</option>
-                            <option value="NC">North Carolina</option>
-                            <option value="ND">North Dakota</option>
-                            <option value="OH">Ohio</option>
-                            <option value="OK">Oklahoma</option>
-                            <option value="OR">Oregon</option>
-                            <option value="PA">Pennsylvania</option>
-                            <option value="RI">Rhode Island</option>
-                            <option value="SC">South Carolina</option>
-                            <option value="SD">South Dakota</option>
-                            <option value="TN">Tennessee</option>
-                            <option value="TX">Texas</option>
-                            <option value="UT">Utah</option>
-                            <option value="VT">Vermont</option>
-                            <option value="VA">Virginia</option>
-                            <option value="WA">Washington</option>
-                            <option value="WV">West Virginia</option>
-                            <option value="WI">Wisconsin</option>
-                            <option value="WY">Wyoming</option>
-                        </select></div>
-                        <div class="error">Please select a state</div>
+                    <div id="street_error" class="error">Please enter the street address</div>
+                </div>
+                <div class="col-xs-12 col-sm-8 col-md-2 col-content col-left">
+                    <div class="dlabel">City:<span class="asterisk">&nbsp;*</span></div>
+                    <div><input name="city" placeholder="Enter the city name" 
+                                class="form-control" type="text" value=""
+                                oninput="resetError(this, 'city_error')"/></div>
+                    <div id="city_error" class="error">Please enter the city</div>
+                </div>
+                <div class="col-xs-12 col-sm-8 col-md-2 col-content col-left">
+                    <div class="dlabel">State:<span class="asterisk">&nbsp;*</span></div>
+                    <div><select class="form-control" name="state"
+                                 oninput="resetError(this, 'state_error')">
+                        <option value=""  >Select your state...</option>
+                        <option value="AL">Alabama</option>
+                        <option value="AK">Alaska</option>
+                        <option value="AZ">Arizona</option>
+                        <option value="AR">Arkansas</option>
+                        <option value="CA">California</option>
+                        <option value="CO">Colorado</option>
+                        <option value="CT">Connecticut</option>
+                        <option value="DE">Delaware</option>
+                        <option value="DC">District Of Columbia</option>
+                        <option value="FL">Florida</option>
+                        <option value="GA">Georgia</option>
+                        <option value="HI">Hawaii</option>
+                        <option value="ID">Idaho</option>
+                        <option value="IL">Illinois</option>
+                        <option value="IN">Indiana</option>
+                        <option value="IA">Iowa</option>
+                        <option value="KS">Kansas</option>
+                        <option value="KY">Kentucky</option>
+                        <option value="LA">Louisiana</option>
+                        <option value="ME">Maine</option>
+                        <option value="MD">Maryland</option>
+                        <option value="MA">Massachusetts</option>
+                        <option value="MI">Michigan</option>
+                        <option value="MN">Minnesota</option>
+                        <option value="MS">Mississippi</option>
+                        <option value="MO">Missouri</option>
+                        <option value="MT">Montana</option>
+                        <option value="NE">Nebraska</option>
+                        <option value="NV">Nevada</option>
+                        <option value="NH">New Hampshire</option>
+                        <option value="NJ">New Jersey</option>
+                        <option value="NM">New Mexico</option>
+                        <option value="NY">New York</option>
+                        <option value="NC">North Carolina</option>
+                        <option value="ND">North Dakota</option>
+                        <option value="OH">Ohio</option>
+                        <option value="OK">Oklahoma</option>
+                        <option value="OR">Oregon</option>
+                        <option value="PA">Pennsylvania</option>
+                        <option value="RI">Rhode Island</option>
+                        <option value="SC">South Carolina</option>
+                        <option value="SD">South Dakota</option>
+                        <option value="TN">Tennessee</option>
+                        <option value="TX">Texas</option>
+                        <option value="UT">Utah</option>
+                        <option value="VT">Vermont</option>
+                        <option value="VA">Virginia</option>
+                        <option value="WA">Washington</option>
+                        <option value="WV">West Virginia</option>
+                        <option value="WI">Wisconsin</option>
+                        <option value="WY">Wyoming</option>
+                    </select></div>
+                    <div id="state_error" class="error">Please select a state</div>
+                </div>
+                <div class="col-xs-12 col-sm-8 col-md-2 col-content col-left">
+                    <div class="dlabel">
+                        Degree:<span class="asterisk">&nbsp;*</span>
                     </div>
-                    <div class="col-xs-12 col-sm-8 col-md-2 col-content">
-                        <div class="white-label">
-                            Degree:<span class="asterisk">&nbsp;*</span>
-                        </div>
-                        <div style="padding-top: 5px">
-                            <label class="radio-inline mylabel"><input type="radio" checked name="unit" id="us" value="us">Fahrenheit</label>
-                            <label class="radio-inline mylabel"><input type="radio" name="unit" id="si" value="si">Celsius</label>
-                        </div>
+                    <div style="padding-top: 5px">
+                        <label class="radio-inline mylabel"><input type="radio" checked name="unit" id="us" value="us">Fahrenheit</label>
+                        <label class="radio-inline mylabel"><input type="radio" name="unit" id="si" value="si">Celsius</label>
                     </div>
-                    <div class="col-xs-12 col-sm-8 col-md-3 col-content">
-                        <div style="float: right; margin-right: 15px; padding-top: 10px">
-                        <button type="button" class="btn btn-primary">
-                            <span class="glyphicon glyphicon-search" style="padding-right: 5px"></span>Search
-                        </button>
-                        <button type="button" style="float: right" class="btn btn-default">
-                            <span class="glyphicon glyphicon-refresh" style="padding-right: 5px"></span>Clear
-                        </button>
-                        <div style="padding-top: 20px; color: white">Powered by:
-                            <a href="http://forecast.io"><img width="100px" src="images/forecast_logo.png" /></a>
+                </div>
+                <div class="col-xs-12 col-sm-8 col-md-3 col-content col-left">
+                    <div class="text-right">
+                        <div style="padding-top: 15px">
+                            <div style="padding-left: 10px; float: right">
+                                <button type="button" class="btn btn-default"
+                                        onclick="resetForm()">
+                                    <span class="glyphicon glyphicon-refresh" style="padding-right: 5px"></span>Clear
+                                </button>
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-primary" 
+                                        onclick="validateForm()">
+                                    <span class="glyphicon glyphicon-search" style="padding-right: 5px"></span>Search
+                                </button>
+                            </div>
                         </div>
+                        <div style="padding-top: 10px; color: white; ">Powered by:
+                            <a href="http://forecast.io">
+                                <img width="100px" src="images/forecast_logo.png" />
+                            </a>
                         </div>
                     </div>
                 </div>
-            </form>
-            <br />
+            </div>
+            <hr />
+            
+            <div id="result" class="row">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation">
+                        <a href="#rightnow" aria-controls="rightnow" 
+                           role="tab" data-toggle="tab">Right Now</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#nexttwentyfour" aria-controls="nexttwentyfour" role="tab" 
+                           data-toggle="tab">Next 24 Hours</a>
+                    </li>
+                    <li role="presentation" class="active">
+                        <a href="#nextseven" aria-controls="nextseven" role="tab" 
+                           data-toggle="tab">Next 7 Days</a>
+                    </li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane" id="rightnow">
+                        <div class="col-xs-12 col-sm-12 col-md-6">
+                            <div class="row" style="background: #f27e7f">
+                                <div class="col-xs-12 col-sm-12 col-md-6 text-center">
+                                    <img id="weather_img"  width="110px" 
+                                         src="images/cloud_day.png"/>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-6"
+                                     style="text-align: center">
+                                    <div class="dlabel">
+                                        <span>Mostly Cloudy</span> in
+                                        <span>Los Angeles</span>,
+                                        <span>CA</span>
+                                    </div>
+                                    <div style="width: 80px; margin: 0 auto;
+                                                color: white">
+                                        <span style="font-size: 48px">71</span>
+                                        <span style="float: right; padding-top: 10px">
+                                            &deg;&nbsp;F
+                                        </span>
+                                    </div>
+                                    <div style="padding-bottom: 10px">
+                                        <span style="width: 70px; margin: 0 auto;">
+                                            <span style="color: blue">L:
+                                                <span id="temp_low">23</span>&deg;
+                                            </span> |
+                                            <span style="color: green">H:
+                                                <span id="temp_high">26</span>&deg;
+                                            </span>
+                                        </span>
+                                        <span style="float: right; margin-top: -10px">
+                                            <a><img src="images/fb_icon.png" 
+                                                    width="30px"/>
+                                            </a>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <table class="table table-striped">
+                                    <tr>
+                                        <td>Precipitation</td>
+                                        <td id="precipitation">None</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Chance of Rain</td>
+                                        <td id="rain">84%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Wind Speed</td>
+                                        <td id="rain">3.95 mph</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Dew Point</td>
+                                        <td id="dew">65.99&deg; F</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Humidity</td>
+                                        <td id="humidity">84%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Visibility</td>
+                                        <td id="visibility">9.08 mi</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sunrise</td>
+                                        <td id="sunrise">06:59 AM</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sunset</td>
+                                        <td id="sunset">06:59 PM</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-6">
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane row" id="nexttwentyfour">
+                        <div class="col-xs-12 col-sm-12 col-md-12">
+                            <table class="table text-center">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Time</th>
+                                        <th class="text-center">Summary</th>
+                                        <th class="text-center">Cloud Cover</th>
+                                        <th class="text-center">Temp (&deg;
+                                            <span id="table-temp-unit">F</span>)
+                                        </th>
+                                        <th class="text-center">View Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="accordion-toggle" data-toggle="collapse" 
+                                        data-target="#details1">
+                                        <td>10:00 PM</td>
+                                        <td><img src="images/cloud_day.png" width="50px"></td>
+                                        <td>0%</td>
+                                        <td>70</td>
+                                        <td><i class="indicator glyphicon glyphicon-plus"></i>
+                                        </td>
+                                    </tr>
+                                    <tr class="accordion-body collapse" id="details1">
+                                        <td colspan="5">
+                                            <table class="table table-condensed">
+                                                <thead>
+                                                    <th class="text-center">Wind</th>
+                                                    <th class="text-center">Humidity</th>
+                                                    <th class="text-center">Visibility</th>
+                                                    <th class="text-center">Pressure</th>
+                                                </thead>
+                                                <tr>
+                                                    <td>Wind</td>
+                                                    <td>Wind</td>
+                                                    <td>Wind</td>
+                                                    <td>Wind</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr class="accordion-toggle" data-toggle="collapse" 
+                                        data-target="#details2">
+                                        <td>10:00 PM</td>
+                                        <td><img src="images/cloud_day.png" width="50px"></td>
+                                        <td>0%</td>
+                                        <td>70</td>
+                                        <td><i class="indicator glyphicon glyphicon-plus"></i>
+                                        </td>
+                                    </tr>
+                                    <tr class="accordion-body collapse" id="details2">
+                                        <td colspan="5">
+                                            <table class="table table-condensed">
+                                                <thead>
+                                                    <th class="text-center">Wind</th>
+                                                    <th class="text-center">Humidity</th>
+                                                    <th class="text-center">Visibility</th>
+                                                    <th class="text-center">Pressure</th>
+                                                </thead>
+                                                <tr>
+                                                    <td>Wind</td>
+                                                    <td>Wind</td>
+                                                    <td>Wind</td>
+                                                    <td>Wind</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane active" id="nextseven">
+                        <div class="row-centered">
+                            <div class="col-xs-6 col-sm-2 col-md-1 col-centered">
+                                <button type="button" class="btn col-radius" data-toggle="modal" 
+                                        style="background: #357cb4" data-target="#monday">
+                                    <div class="dlabel lab-pad">Monday</div>
+                                    <div class="dlabel lab-pad">Oct 16</div>
+                                    <div class="lab-pad">
+                                        <img src="images/cloud_day.png" width="100px" />
+                                    </div>
+                                    <div class="white lab-pad">Min<br />Temp</div>
+                                    <div class="white lab-pad temp">67&deg;</div>
+                                    <div class="white lab-pad">Max<br />Temp</div>
+                                    <div class="white lab-pad temp">81&deg;</div>
+                                </button>
+                            </div>
+                            <div class="col-xs-6 col-sm-2 col-md-1 col-centered">
+                                <button type="button" class="btn col-radius" data-toggle="modal" 
+                                        style="background: #eb4343" data-target="#monday">
+                                    <div class="dlabel lab-pad">Tuesday</div>
+                                    <div class="dlabel lab-pad">Oct 16</div>
+                                    <div class="lab-pad">
+                                        <img src="images/cloud_day.png" width="100px" />
+                                    </div>
+                                    <div class="white lab-pad">Min<br />Temp</div>
+                                    <div class="white lab-pad temp">67&deg;</div>
+                                    <div class="white lab-pad">Max<br />Temp</div>
+                                    <div class="white lab-pad temp">81&deg;</div>
+                                </button>
+                            </div>
+                            <div class="col-xs-6 col-sm-2 col-md-1 col-centered">
+                                <button type="button" class="btn col-radius" data-toggle="modal" 
+                                        style="background: #e58d4e" data-target="#monday">
+                                    <div class="dlabel lab-pad">Wednesday</div>
+                                    <div class="dlabel lab-pad">Oct 16</div>
+                                    <div class="lab-pad">
+                                        <img src="images/cloud_day.png" width="100px" />
+                                    </div>
+                                    <div class="white lab-pad">Min<br />Temp</div>
+                                    <div class="white lab-pad temp">67&deg;</div>
+                                    <div class="white lab-pad">Max<br />Temp</div>
+                                    <div class="white lab-pad temp">81&deg;</div>
+                                </button>
+                            </div>
+                            <div class="col-xs-6 col-sm-2 col-md-1 col-centered">
+                                <button type="button" class="btn col-radius" data-toggle="modal" 
+                                        style="background: #a7a439" data-target="#monday">
+                                    <div class="dlabel lab-pad">Monday</div>
+                                    <div class="dlabel lab-pad">Oct 16</div>
+                                    <div class="lab-pad">
+                                        <img src="images/cloud_day.png" width="100px" />
+                                    </div>
+                                    <div class="white lab-pad">Min<br />Temp</div>
+                                    <div class="white lab-pad temp">67&deg;</div>
+                                    <div class="white lab-pad">Max<br />Temp</div>
+                                    <div class="white lab-pad temp">81&deg;</div>
+                                </button>
+                            </div>
+                            <div class="hidden-xs hidden-md visible-sm-block 
+                                        col-sm-2 col-centered"></div>
+                            <div class="col-xs-6 col-sm-2 col-md-1 col-centered">
+                                <button type="button" class="btn col-radius" data-toggle="modal" 
+                                        style="background: #9770a7" data-target="#monday">
+                                    <div class="dlabel lab-pad">Monday</div>
+                                    <div class="dlabel lab-pad">Oct 16</div>
+                                    <div class="lab-pad">
+                                        <img src="images/cloud_day.png" width="100px" />
+                                    </div>
+                                    <div class="white lab-pad">Min<br />Temp</div>
+                                    <div class="white lab-pad temp">67&deg;</div>
+                                    <div class="white lab-pad">Max<br />Temp</div>
+                                    <div class="white lab-pad temp">81&deg;</div>
+                                </button>
+                            </div>
+                            <div class="col-xs-6 col-sm-2 col-md-1 col-centered">
+                                <button type="button" class="btn col-radius" data-toggle="modal" 
+                                        style="background: #f37c7e" data-target="#monday">
+                                    <div class="dlabel lab-pad">Monday</div>
+                                    <div class="dlabel lab-pad">Oct 16</div>
+                                    <div class="lab-pad">
+                                        <img src="images/cloud_day.png" width="100px" />
+                                    </div>
+                                    <div class="white lab-pad">Min<br />Temp</div>
+                                    <div class="white lab-pad temp">67&deg;</div>
+                                    <div class="white lab-pad">Max<br />Temp</div>
+                                    <div class="white lab-pad temp">81&deg;</div>
+                                </button>
+                            </div>
+                            <div class="col-xs-6 col-sm-2 col-md-1 col-centered">
+                                <button type="button" class="btn col-radius" data-toggle="modal" 
+                                        style="background: #ce4571" data-target="#monday">
+                                    <div class="dlabel lab-pad">Monday</div>
+                                    <div class="dlabel lab-pad">Oct 16</div>
+                                    <div class="lab-pad">
+                                        <img src="images/cloud_day.png" width="100px" />
+                                    </div>
+                                    <div class="white lab-pad">Min<br />Temp</div>
+                                    <div class="white lab-pad temp">67&deg;</div>
+                                    <div class="white lab-pad">Max<br />Temp</div>
+                                    <div class="white lab-pad temp">81&deg;</div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+    <div id="monday" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+        <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h5 class="modal-title">Weather in Los Angeles on Oct 16</h5>
+                </div>
+                <div class="modal-body text-center">
+                    <div><img src="images/cloud_day.png" width="120px" /></div>
+                    <div style="padding: 30px 0 15px 0">
+                        <span class="modal-day">Friday:</span>
+                        <span class="modal-caption">Mostly cloudy throughout the day.</span>
+                    </div>
+                    <div class="row row-centered">
+                        <div class="col-xs-7 col-sm-6 col-md-4 col-centered">
+                            <h5 class="modal-table-header modal-title">Sunrise Time</h5>
+                            <div class="modal-value">07:00 AM</div>
+                        </div>
+                        <div class="col-xs-7 col-sm-6 col-md-4 col-centered">
+                            <h5 class="modal-table-header modal-title">Sunset Time</h5>
+                            <div class="modal-value">07:00 PM</div>
+                        </div>
+                        <div class="col-xs-7 col-sm-6 col-md-4 col-centered">
+                            <h5 class="modal-table-header modal-title">Humidity</h5>
+                            <div class="modal-value">80%</div>
+                        </div>
+                        <div class="col-xs-7 col-sm-6 col-md-4 col-centered">
+                            <h5 class="modal-table-header modal-title">Windspeed</h5>
+                            <div class="modal-value">3.98 mph</div>
+                        </div>
+                        <div class="col-xs-7 col-sm-6 col-md-4 col-centered">
+                            <h5 class="modal-table-header modal-title">Visibility</h5>
+                            <div class="modal-value">7.22 mi</div>
+                        </div>
+                        <div class="col-xs-7 col-sm-6 col-md-4 col-centered">
+                            <h5 class="modal-table-header modal-title">Pressure</h5>
+                            <div class="modal-value">1012.08 mb</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" 
+                            data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+        </div>
 </body>
 </html>
