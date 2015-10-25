@@ -24,6 +24,14 @@
     
 </head>
 <body>
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
     <h1 style="text-align: center">Forecast Search</h1>
     <div class="container-container">
         <div class="container">
@@ -190,9 +198,9 @@
                                             </span>
                                         </span>
                                         <span style="float: right; margin-top: -10px">
-                                            <a><img src="images/fb_icon.png" 
-                                                    width="30px"/>
-                                            </a>
+                                            <div class="fb-share-button"
+                                                 data-href="http://cs-server.usc.edu:24113/HW8/"
+                                                 data-layout="icon"></div>
                                         </span>
                                     </div>
                                 </div>
