@@ -1,5 +1,4 @@
-var tabs = ['rightnow', 'nexttwentyfour', 'nextseven'],
-    input = {
+var input = {
         address: 'address_error',
         city   : 'city_error',
         state  : 'state_error',
@@ -107,70 +106,6 @@ function form_params() {
         }
     }
     return params;
-}
-function getHours(hours) {
-    "use strict";
-    return (hours <= 12) ? hours : hours - 12;
-}
-function getMeridiem(hours) {
-    "use strict";
-    return (hours < 12) ? "AM" : "PM";
-}
-function convertTime(inputFormat) {
-    "use strict";
-    var utcSeconds, d;
-    function pad(value) {
-        return (value < 10) ? "0" + value : value;
-    }
-    utcSeconds = inputFormat;
-    d = new Date(0); // The 0 there is the key, which sets the date to the epoch
-    d.setUTCSeconds(utcSeconds);
-    return [pad(getHours(d.getHours())), pad(d.getMinutes())].join(':') + " " +
-        getMeridiem(d.getHours());
-}
-function magic(data) {
-    "use strict";
-    var i;
-    document.getElementById('rightnow-weather').innerText = data.currently.summary;
-    document.getElementById('rightnow-img').src =
-        image_path + map.image[data.currently.icon] + ".png";
-    document.getElementById('rightnow-img').title = data.currently.summary;
-    document.getElementById('rightnow-img').alt = data.currently.summary;
-    document.getElementById('rightnow-city').innerText = data.city;
-    document.getElementById('rightnow-state').innerText = data.state;
-    document.getElementById('rightnow-temp').innerText =
-        Math.round(data.currently.temperature);
-    document.getElementById('rightnow-unit').innerText = map.unit[data.unit].temperature;
-    document.getElementById('rightnow-temp_low').innerText =
-        Math.round(data.daily.data[0].temperatureMin);
-    document.getElementById('rightnow-temp_high').innerText =
-        Math.round(data.daily.data[0].temperatureMax);
-    for (i = 0; i < map.precipitation.length; i += 1) {
-        if (data.currently.precipIntensity >= map.precipitation.values[i]) {
-            document.getElementById('rightnow-precipitation').innerText =
-                map.precipitation.label[i];
-            break;
-        }
-    }
-    document.getElementById('rightnow-rain').innerText =
-        String(Math.round(data.currently.precipProbability * 100));
-    document.getElementById('rightnow-wind').innerText =
-        String(Math.round(data.currently.windSpeed * 100) / 100) + " " +
-        map.unit[data.unit].windspeed;
-    document.getElementById('rightnow-dew-temp').innerText =
-        String(Math.round(data.currently.dewPoint * 100) / 100);
-    document.getElementById('rightnow-dew-unit').innerText =
-        String(map.unit[data.unit].temperature);
-    document.getElementById('rightnow-humidity').innerText =
-        String(Math.round(data.currently.humidity));
-    document.getElementById('rightnow-visibility').innerText =
-        String(Math.round(data.currently.visibility * 100) / 100) + " " +
-        map.unit[data.unit].visibility;
-    document.getElementById('rightnow-sunrise').innerText =
-        convertTime(data.daily.data[0].sunriseTime);
-    document.getElementById('rightnow-sunset').innerText =
-        convertTime(data.daily.data[0].sunsetTime);
-    document.getElementById('result').style.display = 'block';
 }
 function submitForm() {
     "use strict";
