@@ -1,0 +1,100 @@
+body, html {
+    display: table;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+body {
+    background: url("images/bg.jpg"); 
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+}
+.asterisk {
+    color: red;
+}
+.mylabel {
+    color: white;
+}
+.col-content {
+    padding: 5px 5px 15px 5px;
+    vertical-align: top;
+}
+.row-content {
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+    padding: 15px 10px 20px 10px;
+}
+.col-radius {
+    border-radius: 8px;
+    padding: 15px 5px 20px 5px;
+}
+.error {
+    color: firebrick;
+    display: none;
+    font-size: 12px;
+    font-weight: bold;
+}
+.dlabel {
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+}
+.white {
+    color: white;
+}
+.temp {
+    font-size: 36px;
+    font-weight: bold;
+}
+.container-container {
+    margin: auto;
+    padding: 10px 10px 10px 10px;
+}
+.table-striped > tbody > tr:nth-of-type(even) {
+    background-color: #f1dddd;
+}
+.row-centered {
+    text-align:center;
+}
+.col-left {
+    display: inline-table;
+    /* reset the text-align */
+    float: none;
+    /* inline-block space fix */
+    margin-right:-4px;
+    text-align: left;
+}
+.col-centered {
+    display: inline-table;
+    /* reset the text-align */
+    float: none;
+    /* inline-block space fix */
+    margin-right:-4px;
+    padding: 5px 5px 5px 5px;
+    text-align: center;
+}
+.lab-pad {
+    padding: 5px 0;
+}
+.nextseven-container {
+    background-color: #2f3439;
+    border-radius: 3px;
+    padding: 15px 10px 20px 10px;
+}
+.modal-caption {
+    color: #ffb122;
+    font-size: 20px;
+}
+.modal-day {
+    font-size: 20px;
+}
+.modal-value {
+    font-size: 11px;
+    padding-top: 5px;
+}

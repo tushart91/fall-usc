@@ -7,200 +7,37 @@
     <meta name="author" content="Tushar Tiwari">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-
-<!-- Optional theme -->
+    <link rel="stylesheet" 
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <!-- custom libraries -->
+    <link rel="stylesheet" href="styles.css">
     
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            display: table;
-        }
-        body {
-            background: url("images/bg.jpg"); 
-            background-repeat: no-repeat;
-            background-size: cover;
-            -webkit-background-size: cover;
-            -moz-background-size: cover;
-            -o-background-size: cover;
-            background-attachment: fixed;
-        }
-        .asterisk {
-            color: red;
-        }
-        .mylabel {
-            color: white;
-        }
-        .col-content {
-            padding: 5px 5px 15px 5px !important;
-            vertical-align: top;
-        }
-        .row-content {
-            border-radius: 3px;
-            background-color: rgba(0, 0, 0, 0.2);
-            padding: 15px 10px 20px 10px;
-        }
-        .col-radius {
-            border-radius: 8px;
-            padding: 15px 5px 20px 5px; !important;
-        }
-        .error {
-            display: none;
-            color: firebrick;
-            font-weight: bold;
-            font-size: 12px
-        }
-        .dlabel {
-            color: white;
-            font-weight: bold;
-            font-size: 12px
-        }
-        .white {
-            color: white;
-        }
-        .temp {
-            font-size: 36px;
-            font-weight: bold;
-        }
-        .container-container {
-            margin: auto;
-            padding: 10px 10px 10px 10px;
-        }
-        .table-striped > tbody > tr:nth-of-type(even) {
-            background-color: #f1dddd;
-        }
-        .row-centered {
-            text-align:center;
-        }
-        .col-left {
-            display: inline-table;
-            /* reset the text-align */
-            float: none;
-            text-align: left;
-            /* inline-block space fix */
-            margin-right:-4px;
-        }
-        .col-centered {
-            display: inline-table;
-            /* reset the text-align */
-            float: none;
-            text-align: center;
-            /* inline-block space fix */
-            margin-right:-4px;
-            padding: 5px 5px 5px 5px !important;
-        }
-        .lab-pad {
-            padding: 5px 0;
-        }
-        #nextseven {
-            border-radius: 3px;
-            background-color: #2f3439;
-            padding: 15px 10px 20px 10px;
-        }
-        .modal-caption {
-            font-size: 20px;
-            color: #ffb122;
-        }
-        .modal-day {
-            font-size: 20px;
-        }
-        .modal-table-header {
-            
-        }
-        .modal-value {
-            padding-top: 5px;
-            font-size: 11px
-        }
-    </style>
-    <script type="text/javascript">
-        var tabs = ['rightnow', 'nexttwentyfour', 'nextseven'];
-        function resetForm()
-        {
-            document.getElementsByName("street")[0].value = "";
-            document.getElementsByName("city")[0].value = "";
-            document.getElementsByName("state")[0].selectedIndex = 0;
-            document.getElementById("us").checked = true;
-            document.getElementById("street_error").style.display = "none";
-            document.getElementById("city_error").style.display = "none";
-            document.getElementById("state_error").style.display = "none";
-            if (document.getElementById("result"))
-                document.getElementById("result").style.display = 'none';
-        }
-        function validateForm()
-        {
-            var address = document.getElementsByName("street")[0].value;
-            var city = document.getElementsByName("city")[0].value;
-            var state = document.getElementsByName("state")[0].value;
-            var flag = false;
-            if (!address)
-            {
-                document.getElementById("street_error").style.display = "block";
-                flag = true;
-            }
-            else
-            {
-                document.getElementById("street_error").style.display = "none";
-            }
-            if (!city)
-            {
-                document.getElementById("city_error").style.display = "block";
-                flag = true;
-            }
-            else
-            {
-                document.getElementById("city_error").style.display = "none";
-            }
-            if (!state)
-            {
-                document.getElementById("state_error").style.display = "block";
-                flag = true;
-            }
-            else
-            {
-                document.getElementById("state_error").style.display = "none";
-            }
-            if (flag)
-                return false;
-            return true;
-        }
-        function resetError(sender, error)
-        {
-            if (!sender.value && document.getElementById(error).style.display == "none")
-            {
-                document.getElementById(error).style.display = "block";
-            }
-        }
-        function tab_change(tab_id)
-        {
-            for (var i = 0; i < 3; i++)
-                document.getElementById(tabs[i]).style.display = 'none';
-            document.getElementById(tab_id).style.display = 'block';
-        }
-    </script>
+    <!-- custom libraries -->
+    <script type="text/javascript" src="scripts.js"></script>
+    
 </head>
 <body>
     <h1 style="text-align: center">Forecast Search</h1>
     <div class="container-container">
         <div class="container">
             <div class="row row-content row-centered">
+            <form autocomplete="on" action="index.php" method="post">
                 <div class="col-xs-12 col-sm-8 col-md-3 col-content col-left">
                     <div class="dlabel">
                         Street Address:<span class="asterisk">&nbsp;*</span>
                     </div>
                     <div>
-                        <input name="street" placeholder="Enter street address" value=""
+                        <input name="address" placeholder="Enter street address" value=""
                             class="form-control" type="text" 
-                            oninput="resetError(this, 'street_error')"/>
+                            oninput="resetError(this, 'address_error')"/>
                     </div>
-                    <div id="street_error" class="error">Please enter the street address</div>
+                    <div id="address_error" class="error">Please enter the street address</div>
                 </div>
                 <div class="col-xs-12 col-sm-8 col-md-2 col-content col-left">
                     <div class="dlabel">City:<span class="asterisk">&nbsp;*</span></div>
@@ -288,7 +125,7 @@
                             </div>
                             <div>
                                 <button type="button" class="btn btn-primary" 
-                                        onclick="validateForm()">
+                                        onclick="submitForm()">
                                     <span class="glyphicon glyphicon-search" style="padding-right: 5px"></span>Search
                                 </button>
                             </div>
@@ -300,13 +137,14 @@
                         </div>
                     </div>
                 </div>
+            </form>
             </div>
             <hr />
             
-            <div id="result" class="row">
+            <div id="result" style="display: none" class="row">
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation">
+                    <li role="presentation" class="active">
                         <a href="#rightnow" aria-controls="rightnow" 
                            role="tab" data-toggle="tab">Right Now</a>
                     </li>
@@ -314,42 +152,40 @@
                         <a href="#nexttwentyfour" aria-controls="nexttwentyfour" role="tab" 
                            data-toggle="tab">Next 24 Hours</a>
                     </li>
-                    <li role="presentation" class="active">
+                    <li role="presentation">
                         <a href="#nextseven" aria-controls="nextseven" role="tab" 
                            data-toggle="tab">Next 7 Days</a>
                     </li>
                 </ul>
-
                 <!-- Tab panes -->
                 <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane" id="rightnow">
+                    <div role="tabpanel" class="tab-pane active" id="rightnow">
                         <div class="col-xs-12 col-sm-12 col-md-6">
                             <div class="row" style="background: #f27e7f">
                                 <div class="col-xs-12 col-sm-12 col-md-6 text-center">
-                                    <img id="weather_img"  width="110px" 
-                                         src="images/cloud_day.png"/>
+                                    <img id="rightnow-img"  width="110px" 
+                                         src="images/cloud_day.png" />
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-6"
                                      style="text-align: center">
                                     <div class="dlabel">
-                                        <span>Mostly Cloudy</span> in
-                                        <span>Los Angeles</span>,
-                                        <span>CA</span>
+                                        <span id="rightnow-weather">Lorem Ipsum</span> in
+                                        <span id="rightnow-city">Lorem Ipsum</span>,
+                                        <span id="rightnow-state">LI</span>
                                     </div>
                                     <div style="width: 80px; margin: 0 auto;
                                                 color: white">
-                                        <span style="font-size: 48px">71</span>
+                                        <span style="font-size: 48px" id="rightnow-temp">LI</span>
                                         <span style="float: right; padding-top: 10px">
-                                            &deg;&nbsp;F
-                                        </span>
+                                            &deg;&nbsp;<span id="rightnow-unit">L</span></span>
                                     </div>
                                     <div style="padding-bottom: 10px">
                                         <span style="width: 70px; margin: 0 auto;">
                                             <span style="color: blue">L:
-                                                <span id="temp_low">23</span>&deg;
+                                                <span id="rightnow-temp_low">23</span>&deg;
                                             </span> |
                                             <span style="color: green">H:
-                                                <span id="temp_high">26</span>&deg;
+                                                <span id="rightnow-temp_high">26</span>&deg;
                                             </span>
                                         </span>
                                         <span style="float: right; margin-top: -10px">
@@ -364,35 +200,36 @@
                                 <table class="table table-striped">
                                     <tr>
                                         <td>Precipitation</td>
-                                        <td id="precipitation">None</td>
+                                        <td id="rightnow-precipitation">Lorem</td>
                                     </tr>
                                     <tr>
                                         <td>Chance of Rain</td>
-                                        <td id="rain">84%</td>
+                                        <td><span id="rightnow-rain">LI</span>%</td>
                                     </tr>
                                     <tr>
                                         <td>Wind Speed</td>
-                                        <td id="rain">3.95 mph</td>
+                                        <td id="rightnow-wind">3.95 mph</td>
                                     </tr>
                                     <tr>
                                         <td>Dew Point</td>
-                                        <td id="dew">65.99&deg; F</td>
+                                        <td><span id="rightnow-dew-temp">65.99</span>&deg;
+                                            <span id="rightnow-dew-unit"></span></td>
                                     </tr>
                                     <tr>
                                         <td>Humidity</td>
-                                        <td id="humidity">84%</td>
+                                        <td><span id="rightnow-humidity">LI</span><span>%</span></td>
                                     </tr>
                                     <tr>
                                         <td>Visibility</td>
-                                        <td id="visibility">9.08 mi</td>
+                                        <td id="rightnow-visibility">9.08 mi</td>
                                     </tr>
                                     <tr>
                                         <td>Sunrise</td>
-                                        <td id="sunrise">06:59 AM</td>
+                                        <td id="rightnow-sunrise">06:59 AM</td>
                                     </tr>
                                     <tr>
                                         <td>Sunset</td>
-                                        <td id="sunset">06:59 PM</td>
+                                        <td id="rightnow-sunset">06:59 PM</td>
                                     </tr>
                                 </table>
                             </div>
@@ -415,13 +252,14 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr class="accordion-toggle" data-toggle="collapse" 
-                                        data-target="#details1">
+                                    <tr>
                                         <td>10:00 PM</td>
                                         <td><img src="images/cloud_day.png" width="50px"></td>
                                         <td>0%</td>
                                         <td>70</td>
-                                        <td><i class="indicator glyphicon glyphicon-plus"></i>
+                                        <td class="accordion-toggle" data-toggle="collapse" 
+                                               data-target="#details1">
+                                            <i class="indicator glyphicon glyphicon-plus"></i>
                                         </td>
                                     </tr>
                                     <tr class="accordion-body collapse" id="details1">
@@ -442,13 +280,14 @@
                                             </table>
                                         </td>
                                     </tr>
-                                    <tr class="accordion-toggle" data-toggle="collapse" 
-                                        data-target="#details2">
+                                    <tr>
                                         <td>10:00 PM</td>
                                         <td><img src="images/cloud_day.png" width="50px"></td>
                                         <td>0%</td>
                                         <td>70</td>
-                                        <td><i class="indicator glyphicon glyphicon-plus"></i>
+                                        <td class="accordion-toggle" data-toggle="collapse" 
+                                               data-target="#details2">
+                                            <i class="indicator glyphicon glyphicon-plus"></i>
                                         </td>
                                     </tr>
                                     <tr class="accordion-body collapse" id="details2">
@@ -473,7 +312,8 @@
                             </table>
                         </div>
                     </div>
-                    <div role="tabpanel" class="tab-pane active" id="nextseven">
+                    <div role="tabpanel" class="tab-pane nextseven-container" 
+                         id="nextseven">
                         <div class="row-centered">
                             <div class="col-xs-6 col-sm-2 col-md-1 col-centered">
                                 <button type="button" class="btn col-radius" data-toggle="modal" 
@@ -583,9 +423,8 @@
     </div>
     <div id="monday" class="modal fade" role="dialog">
         <div class="modal-dialog">
-
         <!-- Modal content-->
-            <div class="modal-content">
+            <div class="modal-content" tabindex="-1">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h5 class="modal-title">Weather in Los Angeles on Oct 16</h5>
@@ -628,7 +467,6 @@
                             data-dismiss="modal">Close</button>
                 </div>
             </div>
-
         </div>
         </div>
 </body>
