@@ -198,45 +198,17 @@ function populate_nexttwentyfour(data) {
     }
     document.getElementById('nexttwentyfour-container').innerHTML = table_string;
 }
-//<meta property="og:url"           content="http://cs-server.usc.edu:24113/HW8/" />
-//<meta property="og:type"          content="website" />
-//<meta property="og:title"         content="Your Website Title" />
-//<meta property="og:description"   content="Your description" />
-//<meta property="og:image"         content="http://www.your-domain.com/path/image.jpg" />
 function populate_fb(data) {
     "use strict";
-    var meta = document.createElement('meta');
-    meta.setAttribute('property', 'og:url');
-    meta.setAttribute('content', 'http://cs-server.usc.edu:24113/HW8/');
-    document.getElementsByTagName('head')[0].appendChild(meta);
-
-    meta = document.createElement('meta');
-    meta.setAttribute('property', 'og:type');
-    meta.setAttribute('content', 'website');
-    document.getElementsByTagName('head')[0].appendChild(meta);
-
-    meta = document.createElement('meta');
-    meta.setAttribute('property', 'og:title');
-    meta.setAttribute('content', 'Current Weather in' + data.city + ',' + data.state);
-    document.getElementsByTagName('head')[0].appendChild(meta);
-
-    meta = document.createElement('meta');
-    meta.setAttribute('property', 'og:description');
-    meta.setAttribute('content', data.currently.summary + ', ' +
-                      Math.round(data.currently.temperature) + '&deg; ' +
-                      map.unit[data.unit].temperature);
-    document.getElementsByTagName('head')[0].appendChild(meta);
-
-    meta = document.createElement('meta');
-    meta.setAttribute('property', 'og:image');
-    meta.setAttribute('content', 'http://cs-server.usc.edu:24113/HW8/' + image_path +
-                      map.image[data.currently.icon] + '.png');
-    document.getElementsByTagName('head')[0].appendChild(meta);
+    document.getElementById('fb_share').href = 'javascript:myFacebookLogin("' +
+        data.city + '","' + data.state + '","' + map.image[data.currently.icon] + '","' +
+        data.currently.summary + '","' + data.currently.temperature + '","' +
+        map.unit[data.unit].temperature + '")';
 }
 function magic(data) {
     "use strict";
+    populate_fb(data);
     populate_rightnow(data);
     populate_nexttwentyfour(data);
     populate_nextseven(data);
-    populate_fb(data);
 }

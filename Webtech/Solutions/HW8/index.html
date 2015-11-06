@@ -24,14 +24,38 @@
     
 </head>
 <body>
-    <div id="fb-root"></div>
-    <script>(function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s); js.id = id;
-        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5";
-        fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));</script>
+    <script>
+        window.fbAsyncInit = function() {
+            FB.init({
+              appId      : '959207604117287',
+              xfbml      : true,
+              version    : 'v2.5'
+            });
+        };
+        (function(d, s, id){
+             var js, fjs = d.getElementsByTagName(s)[0];
+             if (d.getElementById(id)) {return;}
+             js = d.createElement(s); js.id = id;
+             js.src = "//connect.facebook.net/en_US/sdk.js";
+             fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+        function myFacebookLogin(city, state, image, summary, temp, unit) {
+            FB.ui({
+                method: 'share',
+                title: 'Current Weather in ' + city + ', ' + state,
+                href: 'https://forecast.io',
+                caption: 'Weather Information from forecast.io',
+                picture: 'http://cs-server.usc.edu:45678/hw/hw8/images/' + image + '.png',
+                description: summary + ', ' + temp + '&deg;' + unit,
+                display: 'popup'
+            }, function(response){
+                if (response.length == 0 || "error_code" in response)
+                    alert('Not Posted');
+                else
+                    alert('Posted Successfully');
+            });
+        }
+    </script>
     <h1 style="text-align: center">Forecast Search</h1>
     <div class="container-container">
         <div class="container">
@@ -198,9 +222,9 @@
                                             </span>
                                         </span>
                                         <span style="float: right; margin-top: -10px">
-                                            <div class="fb-share-button"
-                                                 data-href="http://cs-server.usc.edu:24113/HW8/"
-                                                 data-layout="icon"></div>
+                                            <a id="fb_share" href="">
+                                                <img src="images/fb_icon.png" width="30px" />
+                                            </a>
                                         </span>
                                     </div>
                                 </div>
