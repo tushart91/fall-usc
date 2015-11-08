@@ -69,7 +69,6 @@ function populate_rightnow(data) {
         convertTime(data.daily.data[0].sunriseTime);
     document.getElementById('rightnow-sunset').innerText =
         convertTime(data.daily.data[0].sunsetTime);
-    document.getElementById('result').style.display = 'block';
 }
 function populate_nextseven(data) {
     "use strict";
@@ -205,8 +204,62 @@ function populate_fb(data) {
         data.currently.summary + '","' + data.currently.temperature + '","' +
         map.unit[data.unit].temperature + '")';
 }
+
+function populate_map(data) {
+    var layer_name = ["clouds", "precipitation"];
+    var lat = data.latitude;
+    var lon = data.longitude;
+    var zoom = 9;
+    var opacity = 0.2;
+
+    var map = new OpenLayers.Map("map",
+    {
+        units:'m',
+        projection: "EPSG:900913",
+        displayProjection: new OpenLayers.Projection("EPSG:4326"),
+    });
+
+    var mapnik = new OpenLayers.Layer.OSM();
+
+    var clouds = new OpenLayers.Layer.XYZ(
+        "layer "+layer_name[0],
+        "http://${s}.tile.openweathermap.org/map/" + layer_name[0] + "/${z}/${x}/${y}.png",
+        {
+            isBaseLayer: false,
+            opacity: opacity,
+            sphericalMercator: true
+        }
+    );
+
+    var precip = new OpenLayers.Layer.XYZ(
+        "layer "+layer_name[1],
+        "http://${s}.tile.openweathermap.org/map/" + layer_name[1] + "/${z}/${x}/${y}.png",
+        {
+            isBaseLayer: false,
+            opacity: opacity,
+            sphericalMercator: true
+        }
+    );
+
+    var centre = new OpenLayers.LonLat(lon, lat).transform(new OpenLayers.Projection("EPSG:4326"),
+                                new OpenLayers.Projection("EPSG:900913"));
+    map.addLayers([mapnik, clouds, precip]);
+    map.setCenter(centre, zoom);
+    map.events.register("mousemove", map, function (e) {
+        var position = map.getLonLatFromViewPortPx(e.xy).transform(new OpenLayers.Projection("EPSG:900913"),
+                                new OpenLayers.Projection("EPSG:4326"));
+
+        $("#mouseposition").html("Lat: " + Math.round(position.lat*100)/100 + " Lon: " + Math.round(position.lon*100)/100 +
+            ' zoom: '+ map.getZoom());
+    });
+}
+
 function magic(data) {
     "use strict";
+    document.getElementById('result').style.display = 'block';
+    document.getElementById('map').style.height =
+        document.getElementById('rightnow_container').scrollHeight - 20 + "px";
+    populate_map(data);
     populate_fb(data);
     populate_rightnow(data);
     populate_nexttwentyfour(data);

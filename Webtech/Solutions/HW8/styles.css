@@ -127,3 +127,24 @@ body {
     border: 1px solid #ddd;
     border-bottom-color: transparent;
 }
+#map {
+    border: solid 2px #FFF;
+}
+#openlayerlinks {
+    background: #575757;
+    color: white;
+    z-index:1000;
+    width: 33%;
+    font-size: 1em;
+    text-align: left;
+    position: absolute;
+    bottom: 0.2em;
+    left: 0.2em;
+    padding: 0px;
+    width: 33%;
+    /* for IE */
+    filter:alpha(opacity=90);
+    /* CSS3 standard */
+    opacity:0.9;
+    border-radius: 4px;
+}

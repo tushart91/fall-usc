@@ -15,13 +15,14 @@
     <link rel="stylesheet" href="styles.css">
     
     <!-- jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <!-- openlayer library -->
+    <script src="http://openlayers.org/api/OpenLayers.js"></script>
     <!-- custom libraries -->
     <script type="text/javascript" src="scripts.js"></script>
     <script type="text/javascript" src="output.js"></script>
-    
 </head>
 <body>
     <script>
@@ -39,6 +40,7 @@
              js.src = "//connect.facebook.net/en_US/sdk.js";
              fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
+
         function myFacebookLogin(city, state, image, summary, temp, unit) {
             FB.ui({
                 method: 'share',
@@ -173,7 +175,6 @@
             </form>
             </div>
             <hr />
-            
             <div id="result" style="display: none" class="row">
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs" role="tablist">
@@ -193,10 +194,10 @@
                 <!-- Tab panes -->
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="rightnow">
-                        <div class="col-xs-12 col-sm-12 col-md-6">
+                        <div id="rightnow_container" class="col-xs-12 col-sm-12 col-md-6">
                             <div class="row" style="background: #f27e7f">
                                 <div class="col-xs-12 col-sm-12 col-md-6 text-center">
-                                    <img id="rightnow-img"  width="110px" 
+                                    <img id="rightnow-img" width="100px" style="padding: 10px 0"
                                          src="images/cloud_day.png" />
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-6"
@@ -267,7 +268,10 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="col-xs-12 col-sm-12 col-md-6">
+                        <div style="padding: 0 0;"
+                             class="col-xs-12 col-sm-12 col-md-6">
+                            <div id="map"></div>
+                            <div id="openlayerlinks"></div>
                         </div>
                     </div>
                     <div role="tabpanel" class="tab-pane row" id="nexttwentyfour">
@@ -278,8 +282,7 @@
                                         <th class="text-center">Time</th>
                                         <th class="text-center">Summary</th>
                                         <th class="text-center">Cloud Cover</th>
-                                        <th class="text-center">Temp (&deg;
-                                            <span id="table-temp-unit">F</span>)
+                                        <th class="text-center">Temp (&deg;<span id="table-temp-unit">F</span>)
                                         </th>
                                         <th class="text-center">View Details</th>
                                     </tr>
