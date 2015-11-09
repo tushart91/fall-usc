@@ -93,7 +93,7 @@ body {
     /* reset the text-align */
     float: none;
     /* inline-block space fix */
-    margin-right:-4px;
+/*    margin-right:-4px;*/
     padding: 5px 5px 5px 5px;
     text-align: center;
 }
@@ -147,4 +147,7 @@ body {
     /* CSS3 standard */
     opacity:0.9;
     border-radius: 4px;
+}
+.fill {
+    width: 100%
 }

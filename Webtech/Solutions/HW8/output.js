@@ -83,8 +83,8 @@ function populate_nextseven(data) {
         d = new Date(0); // The 0 there is the key, which sets the date to the epoch
         d.setUTCSeconds(dayta.time);
         button_string +=
-            '<div class="col-xs-7 col-sm-2 col-md-1 col-centered">\
-                 <button type="button" class="btn col-radius" data-toggle="modal"\
+            '<div class="col-xs-12 col-sm-2 col-md-1 col-centered">\
+                 <button type="button" class="btn col-radius fill" data-toggle="modal"\
                          style="background: #' + nextseven_colors[i] +
                              '" data-target="#modal'+ String(i) +'">\
                      <div class="dlabel lab-pad">' + weekday[d.getDay()] + '</div>\
