@@ -30,45 +30,60 @@ function die(input, unit) {
 function populate_rightnow(data) {
     "use strict";
     var i;
-    document.getElementById('rightnow-weather').innerText = data.currently.summary;
+    document.getElementById('rightnow-weather').innerText =
+    document.getElementById('rightnow-weather').textContent = data.currently.summary;
     document.getElementById('rightnow-img').src =
         image_path + map.image[data.currently.icon] + ".png";
     document.getElementById('rightnow-img').title = data.currently.summary;
     document.getElementById('rightnow-img').alt = data.currently.summary;
-    document.getElementById('rightnow-city').innerText = data.city;
-    document.getElementById('rightnow-state').innerText = data.state;
-    console.log(data.currently.temperature);
+    document.getElementById('rightnow-city').innerText =
+    document.getElementById('rightnow-city').textContent = data.city;
+    document.getElementById('rightnow-state').innerText =
+    document.getElementById('rightnow-state').textContent = data.state;
     document.getElementById('rightnow-temp').innerText =
+    document.getElementById('rightnow-temp').textContent =
         Math.round(data.currently.temperature);
-    document.getElementById('rightnow-unit').innerText = map.unit[data.unit].temperature;
+    document.getElementById('rightnow-unit').innerText
+    document.getElementById('rightnow-unit').textContent = map.unit[data.unit].temperature;
     document.getElementById('rightnow-temp_low').innerText =
+    document.getElementById('rightnow-temp_low').textContent =
         Math.round(data.daily.data[0].temperatureMin);
     document.getElementById('rightnow-temp_high').innerText =
+    document.getElementById('rightnow-temp_high').textContent =
         Math.round(data.daily.data[0].temperatureMax);
     for (i = 0; i < map.precipitation.length; i += 1) {
         if (data.currently.precipIntensity >= map.precipitation.values[i]) {
             document.getElementById('rightnow-precipitation').innerText =
+            document.getElementById('rightnow-precipitation').textContent =
                 map.precipitation.label[i];
             break;
         }
     }
     document.getElementById('rightnow-rain').innerText =
+        document.getElementById('rightnow-rain').textContent =
         String(Math.round(data.currently.precipProbability * 100));
     document.getElementById('rightnow-wind').innerText =
+        document.getElementById('rightnow-wind').textContent =
         String(Math.round(data.currently.windSpeed * 100) / 100) + " " +
         map.unit[data.unit].windspeed;
     document.getElementById('rightnow-dew-temp').innerText =
+        document.getElementById('rightnow-dew-temp').textContent =
         String(Math.round(data.currently.dewPoint * 100) / 100);
     document.getElementById('rightnow-dew-unit').innerText =
+        document.getElementById('rightnow-dew-unit').textContent =
         String(map.unit[data.unit].temperature);
     document.getElementById('rightnow-humidity').innerText =
+        document.getElementById('rightnow-humidity').textContent =
         String(Math.round(data.currently.humidity));
     document.getElementById('rightnow-visibility').innerText =
+        document.getElementById('rightnow-visibility').textContent =
         String(Math.round(data.currently.visibility * 100) / 100) + " " +
         map.unit[data.unit].visibility;
     document.getElementById('rightnow-sunrise').innerText =
+        document.getElementById('rightnow-sunrise').textContent =
         convertTime(data.daily.data[0].sunriseTime);
     document.getElementById('rightnow-sunset').innerText =
+        document.getElementById('rightnow-sunset').textContent =
         convertTime(data.daily.data[0].sunsetTime);
 }
 function populate_nextseven(data) {
@@ -91,7 +106,7 @@ function populate_nextseven(data) {
                      <div class="dlabel lab-pad">'+ month[d.getMonth()] + ' ' +
                          d.getDate() + '</div>\
                      <div class="lab-pad">\
-                         <img src="' + image_path + map.image[dayta.icon] + '.png" width="100px"\
+                         <img src="' + image_path + map.image[dayta.icon] + '.png" width="100%"\
                           alt="' + dayta.summary + '" title="' + dayta.summary + '"/>\
                      </div>\
                      <div class="white lab-pad">Min<br />Temp</div>\
@@ -197,7 +212,9 @@ function populate_nexttwentyfour(data) {
              </tr>';
     }
     document.getElementById('nexttwentyfour-container').innerHTML = table_string;
-    document.getElementById('table-temp-unit').innerText = map.unit[data.unit].temperature;
+    document.getElementById('table-temp-unit').innerText =
+        document.getElementById('table-temp-unit').textContent =
+        map.unit[data.unit].temperature;
 }
 function populate_fb(data) {
     "use strict";

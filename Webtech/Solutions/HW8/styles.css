@@ -34,6 +34,26 @@ body {
     border-radius: 8px;
     padding: 15px 5px 20px 5px;
 }
+.row-centered {
+    text-align:center;
+}
+.col-left {
+    display: inline-table;
+    /* reset the text-align */
+    float: none;
+    /* inline-block space fix */
+    margin-right:-4px;
+    text-align: left;
+}
+.col-centered {
+    display: inline-table;
+    /* reset the text-align */
+    float: none;
+    /* inline-block space fix */
+    margin-right:-4px;
+    padding: 5px 5px 5px 5px;
+    text-align: center;
+}
 .error {
     color: firebrick;
     display: none;
@@ -76,26 +96,6 @@ body {
 .table-condensed th {
     background-color: #ffffff;
     color: #000000;
-}
-.row-centered {
-    text-align:center;
-}
-.col-left {
-    display: inline-table;
-    /* reset the text-align */
-    float: none;
-    /* inline-block space fix */
-    margin-right:-4px;
-    text-align: left;
-}
-.col-centered {
-    display: inline-table;
-    /* reset the text-align */
-    float: none;
-    /* inline-block space fix */
-/*    margin-right:-4px;*/
-    padding: 5px 5px 5px 5px;
-    text-align: center;
 }
 .lab-pad {
     padding: 5px 0;
@@ -149,5 +149,6 @@ body {
     border-radius: 4px;
 }
 .fill {
-    width: 100%
+    width: 100%;
+    padding: 15px 10px 20px 10px;
 }
