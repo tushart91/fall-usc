@@ -206,6 +206,7 @@ function populate_fb(data) {
 }
 
 function populate_map(data) {
+    document.getElementById("map").innerHTML = "";
     var layer_name = ["clouds", "precipitation"];
     var lat = data.latitude;
     var lon = data.longitude;
