@@ -16,7 +16,7 @@ function convertTime(inputFormat) {
     function pad(value) {
         return (value < 10) ? "0" + value : value;
     }
-    d = new Date(0); // The 0 there is the key, which sets the date to the epoch
+    d = new Date(0);
     d.setUTCSeconds(inputFormat);
     return [pad(getHours(d.getHours())), pad(d.getMinutes())].join(':') + " " +
         getMeridiem(d.getHours());
@@ -209,7 +209,7 @@ function populate_map(data) {
     var layer_name = ["clouds", "precipitation"];
     var lat = data.latitude;
     var lon = data.longitude;
-    var zoom = 9;
+    var zoom = 14;
     var opacity = 0.2;
 
     var map = new OpenLayers.Map("map",

@@ -64,6 +64,8 @@ function resetForm() {
     document.getElementById("address_error").style.display = "none";
     document.getElementById("city_error").style.display = "none";
     document.getElementById("state_error").style.display = "none";
+    document.getElementById("map").innerHTML = "";
+    document.getElementById("openlayerlinks").innerHTML = "";
     if (document.getElementById(result_div)) {
         document.getElementById(result_div).style.display = 'none';
     }
@@ -109,6 +111,10 @@ function form_params() {
 }
 function submitForm() {
     "use strict";
+    document.getElementsByName("address")[0].value = "920 Northwest 9th Avenue";
+    document.getElementsByName("city")[0].value = "Portland";
+    document.getElementsByName("state")[0].selectedIndex = 38;
+    document.getElementById("si").checked = true;
 //    if (!validateForm()) {
 //        return;
 //    }
@@ -119,7 +125,40 @@ function submitForm() {
             magic(JSON.parse(xhttp.responseText));
         }
     };
-    xhttp.open("POST", "index.php", true);
+    xhttp.open("GET", "index.php?" + params, true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send(params);
+    xhttp.send();
 }
+
+$(document).ready(function() {
+    $('form').validate({
+        submitHandler: function(form) {
+            submitForm();
+            return false;
+        },
+        rules: {
+            address: {
+                required: true
+            },
+            city: {
+                required: true
+            },
+            state: {
+                required: true
+            }
+        },
+        messages: {
+            address: "Please enter the street address",
+            city: "Please enter the city",
+            state: "Please select a state"
+        },
+        highlight: function(element, errorClass) {
+            $(element).removeClass(errorClass);
+        },
+        errorElement: 'div',
+        errorClass: 'error',
+        errorPlacement: function(error, element) {
+            error.insertAfter(element.parent());
+        }
+    });
+});

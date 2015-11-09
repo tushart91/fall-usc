@@ -18,6 +18,7 @@
     <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="http://cdn.jsdelivr.net/jquery.validation/1.14.0/jquery.validate.min.js"></script>
     <!-- openlayer library -->
     <script src="http://openlayers.org/api/OpenLayers.js"></script>
     <!-- custom libraries -->
@@ -57,13 +58,20 @@
                     alert('Posted Successfully');
             });
         }
+        $("#cmxform").validate({
+            messages: {
+                email: {
+                    required: 'Enter this!'
+                }
+            }
+        });
     </script>
     <h1 style="text-align: center">Forecast Search</h1>
     <div class="container-container">
         <div class="container">
             <div class="row row-content row-centered">
-            <form autocomplete="on" action="index.php" method="post">
-                <div class="col-xs-12 col-sm-8 col-md-3 col-content col-left">
+            <form autocomplete="on">
+                <div class="col-xs-12 col-sm-8 col-md-3 col-content col-left form-group">
                     <div class="dlabel">
                         Street Address:<span class="asterisk">&nbsp;*</span>
                     </div>
@@ -72,16 +80,16 @@
                             class="form-control" type="text" 
                             oninput="resetError(this, 'address_error')"/>
                     </div>
-                    <div id="address_error" class="error">Please enter the street address</div>
+<!--                    <div id="address_error" class="error">Please enter the street address</div>-->
                 </div>
-                <div class="col-xs-12 col-sm-8 col-md-2 col-content col-left">
+                <div class="col-xs-12 col-sm-8 col-md-2 col-content col-left form-group">
                     <div class="dlabel">City:<span class="asterisk">&nbsp;*</span></div>
                     <div><input name="city" placeholder="Enter the city name" 
                                 class="form-control" type="text" value=""
                                 oninput="resetError(this, 'city_error')"/></div>
-                    <div id="city_error" class="error">Please enter the city</div>
+<!--                    <div id="city_error" class="error">Please enter the city</div>-->
                 </div>
-                <div class="col-xs-12 col-sm-8 col-md-2 col-content col-left">
+                <div class="col-xs-12 col-sm-8 col-md-2 col-content col-left form-group">
                     <div class="dlabel">State:<span class="asterisk">&nbsp;*</span></div>
                     <div><select class="form-control" name="state"
                                  oninput="resetError(this, 'state_error')">
@@ -138,7 +146,7 @@
                         <option value="WI">Wisconsin</option>
                         <option value="WY">Wyoming</option>
                     </select></div>
-                    <div id="state_error" class="error">Please select a state</div>
+<!--                    <div id="state_error" class="error">Please select a state</div>-->
                 </div>
                 <div class="col-xs-12 col-sm-8 col-md-2 col-content col-left">
                     <div class="dlabel">
@@ -159,8 +167,7 @@
                                 </button>
                             </div>
                             <div>
-                                <button type="button" class="btn btn-primary" 
-                                        onclick="submitForm()">
+                                <button type="submit" class="btn btn-primary">
                                     <span class="glyphicon glyphicon-search" style="padding-right: 5px"></span>Search
                                 </button>
                             </div>
