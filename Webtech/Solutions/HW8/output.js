@@ -37,6 +37,7 @@ function populate_rightnow(data) {
     document.getElementById('rightnow-img').alt = data.currently.summary;
     document.getElementById('rightnow-city').innerText = data.city;
     document.getElementById('rightnow-state').innerText = data.state;
+    console.log(data.currently.temperature);
     document.getElementById('rightnow-temp').innerText =
         Math.round(data.currently.temperature);
     document.getElementById('rightnow-unit').innerText = map.unit[data.unit].temperature;
@@ -196,6 +197,7 @@ function populate_nexttwentyfour(data) {
              </tr>';
     }
     document.getElementById('nexttwentyfour-container').innerHTML = table_string;
+    document.getElementById('table-temp-unit').innerText = map.unit[data.unit].temperature;
 }
 function populate_fb(data) {
     "use strict";
@@ -204,7 +206,6 @@ function populate_fb(data) {
         data.currently.summary + '","' + data.currently.temperature + '","' +
         map.unit[data.unit].temperature + '")';
 }
-
 function populate_map(data) {
     document.getElementById("map").innerHTML = "";
     var layer_name = ["clouds", "precipitation"];
@@ -213,7 +214,7 @@ function populate_map(data) {
     var zoom = 14;
     var opacity = 0.2;
 
-    var map = new OpenLayers.Map("map",
+    imap = new OpenLayers.Map("map",
     {
         units:'m',
         projection: "EPSG:900913",
@@ -244,14 +245,14 @@ function populate_map(data) {
 
     var centre = new OpenLayers.LonLat(lon, lat).transform(new OpenLayers.Projection("EPSG:4326"),
                                 new OpenLayers.Projection("EPSG:900913"));
-    map.addLayers([mapnik, clouds, precip]);
-    map.setCenter(centre, zoom);
-    map.events.register("mousemove", map, function (e) {
-        var position = map.getLonLatFromViewPortPx(e.xy).transform(new OpenLayers.Projection("EPSG:900913"),
+    imap.addLayers([mapnik, clouds, precip]);
+    imap.setCenter(centre, zoom);
+    imap.events.register("mousemove", imap, function (e) {
+        var position = imap.getLonLatFromViewPortPx(e.xy).transform(new OpenLayers.Projection("EPSG:900913"),
                                 new OpenLayers.Projection("EPSG:4326"));
 
         $("#mouseposition").html("Lat: " + Math.round(position.lat*100)/100 + " Lon: " + Math.round(position.lon*100)/100 +
-            ' zoom: '+ map.getZoom());
+            ' zoom: '+ imap.getZoom());
     });
 }
 

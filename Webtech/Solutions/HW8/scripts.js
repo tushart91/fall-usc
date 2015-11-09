@@ -1,8 +1,7 @@
 var input = {
         address: 'address_error',
         city   : 'city_error',
-        state  : 'state_error',
-        unit   : null
+        state  : 'state_error'
     },
     result_div = "result",
     state_elem = "state",
@@ -53,7 +52,8 @@ var input = {
             },
             length: 5
         }
-    };
+    },
+    imap = null;
 function form_params() {
     "use strict";
     var key, params = "", value, partial;
@@ -66,10 +66,13 @@ function form_params() {
             params += key + "=" + value;
         }
     }
+    params += "&unit=" + $('input[name="unit"]:checked').val();
+
     return params;
 }
 function submitForm() {
     "use strict";
+    resetOutput();
     var params = form_params(),
         xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
@@ -112,6 +115,9 @@ $(document).ready(function() {
                         return true;
                     }
                 }
+            },
+            unit: {
+                required: true
             }
         },
         messages: {
@@ -130,6 +136,14 @@ $(document).ready(function() {
     });
 });
 
+function resetOutput() {
+    if (imap)
+    {
+        imap.destroy();
+        $(".tab-button:first").click();
+    }
+}
+
 function resetForm() {
     "use strict";
     $('form').validate().resetForm();
@@ -137,8 +151,7 @@ function resetForm() {
     document.getElementsByName("city")[0].value = "";
     document.getElementsByName("state")[0].selectedIndex = 0;
     document.getElementById("us").checked = true;
-    document.getElementById("openlayerlinks").innerHTML = "";
-    document.getElementById("map").innerHTML = "";
+    resetOutput();
     if (document.getElementById(result_div)) {
         document.getElementById(result_div).style.display = 'none';
     }

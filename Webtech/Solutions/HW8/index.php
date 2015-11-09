@@ -1,9 +1,9 @@
 <?php
 if (isset($_GET)) {
-    $address = isset($_GET['address']) ? $_GET['address'] : '';
-    $city = isset($_GET['city']) ? $_GET['city'] : '';
-    $state = isset($_GET['state']) ? $_GET['state'] : '';
-    $unit = isset($_GET['unit']) ? $_GET['unit'] : 'us';
+    $address = $_GET['address'] or die('Address missing');
+    $city = $_GET['city'] or die ('city missing');
+    $state = $_GET['state'] or die('state missing');
+    $unit = $_GET['unit'] or die('unit missing');
     
     $map_url  = "http://maps.google.com/maps/api/geocode/xml?address=";
     $map_url .= $_GET["address"] . ",";
