@@ -54,47 +54,6 @@ var input = {
             length: 5
         }
     };
-        
-function resetForm() {
-    "use strict";
-    document.getElementsByName("address")[0].value = "";
-    document.getElementsByName("city")[0].value = "";
-    document.getElementsByName("state")[0].selectedIndex = 0;
-    document.getElementById("us").checked = true;
-    document.getElementById("address_error").style.display = "none";
-    document.getElementById("city_error").style.display = "none";
-    document.getElementById("state_error").style.display = "none";
-    document.getElementById("map").innerHTML = "";
-    document.getElementById("openlayerlinks").innerHTML = "";
-    if (document.getElementById(result_div)) {
-        document.getElementById(result_div).style.display = 'none';
-    }
-}
-function validateForm() {
-    "use strict";
-    var key, value, flag = false;
-    for (key in input) {
-        if (input.hasOwnProperty(key) && input[key]) {
-            value = document.getElementsByName(key)[0].value;
-            if (!value) {
-                document.getElementById(input[key]).style.display = "block";
-                flag = true;
-            } else {
-                document.getElementById(input[key]).style.display = "none";
-            }
-        }
-    }
-    if (flag) {
-        return false;
-    }
-    return true;
-}
-function resetError(sender, error) {
-    "use strict";
-    if (!sender.value && document.getElementById(error).style.display === "none") {
-        document.getElementById(error).style.display = "block";
-    }
-}
 function form_params() {
     "use strict";
     var key, params = "", value, partial;
@@ -111,13 +70,6 @@ function form_params() {
 }
 function submitForm() {
     "use strict";
-    document.getElementsByName("address")[0].value = "920 Northwest 9th Avenue";
-    document.getElementsByName("city")[0].value = "Portland";
-    document.getElementsByName("state")[0].selectedIndex = 38;
-    document.getElementById("si").checked = true;
-//    if (!validateForm()) {
-//        return;
-//    }
     var params = form_params(),
         xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
@@ -138,13 +90,28 @@ $(document).ready(function() {
         },
         rules: {
             address: {
-                required: true
+                required: {
+                    depends:function(){
+                        $(this).val($.trim($(this).val()));
+                        return true;
+                    }
+                }
             },
             city: {
-                required: true
+                required: {
+                    depends:function(){
+                        $(this).val($.trim($(this).val()));
+                        return true;
+                    }
+                }
             },
             state: {
-                required: true
+                required: {
+                    depends:function(){
+                        $(this).val($.trim($(this).val()));
+                        return true;
+                    }
+                }
             }
         },
         messages: {
@@ -162,3 +129,17 @@ $(document).ready(function() {
         }
     });
 });
+
+function resetForm() {
+    "use strict";
+    $('form').validate().resetForm();
+    document.getElementsByName("address")[0].value = "";
+    document.getElementsByName("city")[0].value = "";
+    document.getElementsByName("state")[0].selectedIndex = 0;
+    document.getElementById("us").checked = true;
+    document.getElementById("openlayerlinks").innerHTML = "";
+    document.getElementById("map").innerHTML = "";
+    if (document.getElementById(result_div)) {
+        document.getElementById(result_div).style.display = 'none';
+    }
+}
