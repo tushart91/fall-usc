@@ -2,24 +2,9 @@ var nextseven_colors = ['357cb4', 'eb4343', 'e58d4e', 'a7a439', '9770a7', 'f37c7
     weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     month = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-function getHours(hours) {
+function convertTime(inputFormat, timezone) {
     "use strict";
-    return (hours <= 12) ? hours : hours - 12;
-}
-function getMeridiem(hours) {
-    "use strict";
-    return (hours < 12) ? "AM" : "PM";
-}
-function convertTime(inputFormat) {
-    "use strict";
-    var utcSeconds, d;
-    function pad(value) {
-        return (value < 10) ? "0" + value : value;
-    }
-    d = new Date(0);
-    d.setUTCSeconds(inputFormat);
-    return [pad(getHours(d.getHours())), pad(d.getMinutes())].join(':') + " " +
-        getMeridiem(d.getHours());
+    return moment.unix(inputFormat).tz(timezone).format('hh:mm A');
 }
 function die(input, unit) {
     if (input === undefined) {
@@ -81,10 +66,10 @@ function populate_rightnow(data) {
         map.unit[data.unit].visibility;
     document.getElementById('rightnow-sunrise').innerText =
         document.getElementById('rightnow-sunrise').textContent =
-        convertTime(data.daily.data[0].sunriseTime);
+        convertTime(data.daily.data[0].sunriseTime, data.timezone);
     document.getElementById('rightnow-sunset').innerText =
         document.getElementById('rightnow-sunset').textContent =
-        convertTime(data.daily.data[0].sunsetTime);
+        convertTime(data.daily.data[0].sunsetTime, data.timezone);
 }
 function populate_nextseven(data) {
     "use strict";
@@ -95,16 +80,15 @@ function populate_nextseven(data) {
                                           col-sm-2 col-centered"></div>';
         }
         dayta = data.daily.data[i + 1];
-        d = new Date(0); // The 0 there is the key, which sets the date to the epoch
-        d.setUTCSeconds(dayta.time);
+        d = moment.unix(dayta.time).tz(data.timezone);
         button_string +=
             '<div class="col-xs-12 col-sm-2 col-md-1 col-centered">\
                  <button type="button" class="btn col-radius fill" data-toggle="modal"\
                          style="background: #' + nextseven_colors[i] +
                              '" data-target="#modal'+ String(i) +'">\
-                     <div class="dlabel lab-pad">' + weekday[d.getDay()] + '</div>\
-                     <div class="dlabel lab-pad">'+ month[d.getMonth()] + ' ' +
-                         d.getDate() + '</div>\
+                     <div class="dlabel lab-pad">' + weekday[d.day()] + '</div>\
+                     <div class="dlabel lab-pad">'+ month[d.month()] + ' ' +
+                         d.date() + '</div>\
                      <div class="lab-pad">\
                          <img src="' + image_path + map.image[dayta.icon] + '.png" width="100%"\
                           alt="' + dayta.summary + '" title="' + dayta.summary + '"/>\
@@ -123,22 +107,24 @@ function populate_nextseven(data) {
                          <div class="modal-header">\
                              <button type="button" class="close" data-dismiss="modal">&times</button>\
                              <h5 class="modal-title">Weather in ' + data.city +' on ' +
-                                 month[d.getMonth()] + ' ' + d.getDate() + '</h5>\
+                                 month[d.month()] + ' ' + d.date() + '</h5>\
                          </div>\
                          <div class="modal-body text-center">\
                              <div><img src="' + image_path + map.image[dayta.icon] + '.png" width="120px" /></div>\
                              <div style="padding: 30px 0 15px 0">\
-                                 <span class="modal-day">' + weekday[d.getDay()] + ':</span>\
+                                 <span class="modal-day">' + weekday[d.day()] + ':</span>\
                                  <span class="modal-caption">' + dayta.summary + '</span>\
                              </div>\
                             <div class="row row-centered">\
                                  <div class="col-xs-7 col-sm-6 col-md-4 col-centered">\
                                      <h5 class="modal-table-header modal-title">Sunrise Time</h5>\
-                                     <div class="modal-value">' + convertTime(dayta.sunriseTime) + '</div>\
+                                     <div class="modal-value">' +
+                                         convertTime(dayta.sunriseTime, data.timezone) + '</div>\
                                  </div>\
                                  <div class="col-xs-7 col-sm-6 col-md-4 col-centered">\
                                      <h5 class="modal-table-header modal-title">Sunset Time</h5>\
-                                     <div class="modal-value">' + convertTime(dayta.sunsetTime) + '</div>\
+                                     <div class="modal-value">' +
+                                         convertTime(dayta.sunsetTime, data.timezone) + '</div>\
                                  </div>\
                                  <div class="col-xs-7 col-sm-6 col-md-4 col-centered">\
                                      <h5 class="modal-table-header modal-title">Humidity</h5>\
@@ -179,7 +165,7 @@ function populate_nexttwentyfour(data) {
         hourta = data.hourly.data[i];
         table_string +=
             '<tr>\
-                 <td>'+ convertTime(hourta.time) + '</td>\
+                 <td>'+ convertTime(hourta.time, data.timezone) + '</td>\
                  <td><img src="' + image_path + map.image[hourta.icon] + '.png"\
                       alt="' + hourta.summary + '" title="' + hourta.summary + '" width="50px"></td>\
                  <td>' + die(Math.round(hourta.cloudCover), '%') + '</td>\
