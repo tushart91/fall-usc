@@ -17,7 +17,7 @@ if (isset($_GET)) {
         $json = json_decode(file_get_contents($api), true);
         unset($json['minutely']);
         $json['address'] = $_GET['address'];
-        $json['city'] = $_GET['city'];
+        $json['$city'] = $_GET['city'];
         $json['state'] = $_GET['state'];
         $json['unit'] = $_GET['unit'];
         header('Content-Type: application/json');

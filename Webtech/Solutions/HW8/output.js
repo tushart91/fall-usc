@@ -22,7 +22,7 @@ function populate_rightnow(data) {
     document.getElementById('rightnow-img').title = data.currently.summary;
     document.getElementById('rightnow-img').alt = data.currently.summary;
     document.getElementById('rightnow-city').innerText =
-    document.getElementById('rightnow-city').textContent = data.city;
+    document.getElementById('rightnow-city').textContent = data.$city;
     document.getElementById('rightnow-state').innerText =
     document.getElementById('rightnow-state').textContent = data.state;
     document.getElementById('rightnow-temp').innerText =
@@ -90,7 +90,7 @@ function populate_nextseven(data) {
                      <div class="dlabel lab-pad">'+ month[d.month()] + ' ' +
                          d.date() + '</div>\
                      <div class="lab-pad">\
-                         <img src="' + image_path + map.image[dayta.icon] + '.png" width="100%"\
+                         <img src="' + image_path + map.image[dayta.icon] + '.png" width="100px"\
                           alt="' + dayta.summary + '" title="' + dayta.summary + '"/>\
                      </div>\
                      <div class="white lab-pad">Min<br />Temp</div>\
@@ -106,7 +106,7 @@ function populate_nextseven(data) {
                      <div class="modal-content" tabindex="-1">\
                          <div class="modal-header">\
                              <button type="button" class="close" data-dismiss="modal">&times</button>\
-                             <h5 class="modal-title">Weather in ' + data.city +' on ' +
+                             <h5 class="modal-title">Weather in ' + data.$city +' on ' +
                                  month[d.month()] + ' ' + d.date() + '</h5>\
                          </div>\
                          <div class="modal-body text-center">\
@@ -205,7 +205,7 @@ function populate_nexttwentyfour(data) {
 function populate_fb(data) {
     "use strict";
     document.getElementById('fb_share').href = 'javascript:myFacebookLogin("' +
-        data.city + '","' + data.state + '","' + map.image[data.currently.icon] + '","' +
+        data.$city + '","' + data.state + '","' + map.image[data.currently.icon] + '","' +
         data.currently.summary + '","' + data.currently.temperature + '","' +
         map.unit[data.unit].temperature + '")';
 }
